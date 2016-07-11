@@ -1,3 +1,8 @@
-/**
- * Created by Alain on 11/07/2016.
- */
+
+function sayHello(person) {
+    return "Hello, " + person;
+}
+
+var user = "World";
+
+document.body.innerHTML = sayHello(user);

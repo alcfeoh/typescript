@@ -12,6 +12,9 @@ class Employee extends Person {
     constructor(public firstName, public middleInitial, public lastName) {
         super();
     }
+    getFullName() : string {
+        return this.firstName + " " + this.lastName;
+    }
 }
 
 function sayHello(person: Person) : string {

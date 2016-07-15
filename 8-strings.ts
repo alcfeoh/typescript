@@ -3,7 +3,7 @@ abstract class Person {
     middleInitial: string;
     lastName: string;
     getFullName() : string {
-        return this.firstName + " " + this.middleInitial + " " + this.lastName;
+        return ` ${this.firstName} ${this.middleInitial} ${this.lastName}`;
     }
 }
 
@@ -24,7 +24,12 @@ class Employee extends Person {
     }
 }
 
+
 let user = new Employee("Alain", "R", "Chautard");
-let greet = new Greeter<string>("Hello "+ user.getFullName());
+
+let msg = `<pre>Hello,
+${user.getFullName()}</pre>`;
+
+let greet = new Greeter<string>(msg);
 
 document.body.innerHTML = greet.sayHello();

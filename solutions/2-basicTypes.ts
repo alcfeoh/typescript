@@ -1,7 +1,7 @@
-enum Name {"John", "Jessica", "Ron", "Lisa"};
+const names = ["John", "Jessica", "Ron", "Lisa"];
 
-for (var i = 0;  i <= 3; i++){
-    document.body.innerHTML += sayHello(Name[i]) + " <br> ";
+for (let name of names){
+    document.body.innerHTML += sayHello(name) + " <br> ";
 }
 
 function sayHello(person : string) {

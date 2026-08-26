@@ -1,7 +1,9 @@
 {
   "scripts": {
     "dev": "vite",
+    "dev:app": "vite --config vite.app.config.ts",
     "build": "tsc && vite build",
+    "build:app": "tsc && vite build --config vite.app.config.ts",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -12,7 +12,36 @@
     <![endif]-->
 </head>
 
-<body>
-<script src="0-greeting.js"></script>
+<body style="margin: 0; display: flex; flex-direction: column; height: 100vh; font-family: sans-serif;">
+<div style="padding: 15px; background: #f4f4f4; border-bottom: 1px solid #ddd; display: flex; gap: 10px; flex-wrap: wrap;">
+    <strong>Examples:</strong>
+    <button onclick="load('0-greeting.ts')">0-greeting</button>
+    <button onclick="load('1-greeting.ts')">1-greeting</button>
+    <button onclick="load('4-class.ts')">4-class</button>
+    <button onclick="load('5-class.ts')">5-class</button>
+    <button onclick="load('6-class.ts')">6-class</button>
+    <button onclick="load('7-generics.ts')">7-generics</button>
+    <button onclick="load('var-vs-let.ts')">var-vs-let</button>
+</div>
+
+<iframe id="output" style="flex-grow: 1; width: 100%; border: none;"></iframe>
+
+<script>
+    function load(scriptName) {
+        const iframe = document.getElementById('output');
+        iframe.srcdoc = `
+            <!doctype html>
+            <html lang="en">
+            <head><meta charset="utf-8"></head>
+            <body style="font-family: sans-serif; padding: 20px;">
+                <script type="module" src="/${scriptName}"><\/script>
+            </body>
+            </html>
+        `;
+    }
+    
+    // Load the first example by default
+    load('0-greeting.ts');
+</script>
 </body>
 </html>

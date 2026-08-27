@@ -3,10 +3,64 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hello World App</title>
+    <title>Product Management</title>
+    <link rel="stylesheet" href="./style.css">
   </head>
   <body>
-    <div id="app"></div>
+    <header>
+      <h1>Product Management</h1>
+      <div class="header-actions">
+        <div class="sort-controls">
+          <label for="sort-field">Sort by:</label>
+          <select id="sort-field">
+            <option value="title">Title</option>
+            <option value="price">Price</option>
+            <option value="brand">Brand</option>
+          </select>
+          <select id="sort-order">
+            <option value="asc">ASC</option>
+            <option value="desc">DESC</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" id="add-product-btn">Add New Product</button>
+      </div>
+    </header>
+
+    <main>
+      <div id="product-list" class="product-grid">
+        <!-- Products will be rendered here -->
+      </div>
+    </main>
+
+    <!-- Product Form Modal -->
+    <div id="product-modal" class="modal">
+      <div class="modal-content">
+        <h2 id="modal-title">Add/Edit Product</h2>
+        <form id="product-form">
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" required>
+          </div>
+          <div class="form-group">
+            <label for="brand">Brand</label>
+            <input type="text" id="brand" name="brand">
+          </div>
+          <div class="form-group">
+            <label for="price">Price ($)</label>
+            <input type="number" id="price" name="price" step="0.01" required>
+          </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="3" required></textarea>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-cancel" id="cancel-btn">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Product</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <script type="module" src="/main.ts"></script>
   </body>
 </html>

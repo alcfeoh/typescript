@@ -1,7 +1,7 @@
 abstract class Person {
-    firstName: string;
-    middleInitial: string;
-    lastName: string;
+    abstract firstName: string;
+    abstract middleInitial: string;
+    abstract lastName: string;
     getFullName() : string {
         return this.firstName + " " + this.middleInitial + " " + this.lastName;
     }
@@ -9,7 +9,7 @@ abstract class Person {
 
 class Employee extends Person {
 
-    constructor(public firstName, public middleInitial, public lastName) {
+    constructor(public firstName: string, public middleInitial: string, public lastName: string) {
         super();
     }
     getFullName() : string {
@@ -24,3 +24,7 @@ function sayHello(person: Person) : string {
 let user = new Employee("Alain", "R", "Chautard");
 
 document.body.innerHTML = sayHello(user);
+
+// Each example is loaded as its own ES module by index.html.
+// This marks the file as a module so its names stay in file scope.
+export {};

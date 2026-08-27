@@ -1,0 +1,25 @@
+{
+  // Type-check config used by `npm run build` / `npm run typecheck`.
+  //
+  // It is the same as tsconfig.json, minus the three examples that are MEANT to
+  // fail compilation — they are the lesson, not a bug:
+  //   0-greeting.ts  implicit any (the untyped "JavaScript" starting point)
+  //   1-greeting.ts  passing number[] where a string is expected
+  //   var-vs-let.ts  block scope of let/const vs var, reassigning a const
+  //
+  // They stay inside tsconfig.json so the editor still shows those errors.
+  //
+  // Emit is off: Vite bundles, tsc only checks.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "coverage",
+    "0-greeting.ts",
+    "1-greeting.ts",
+    "var-vs-let.ts"
+  ]
+}

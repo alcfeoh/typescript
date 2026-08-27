@@ -22,3 +22,7 @@ interface Person {
     firstName: string;
     lastName: string;
 }
+
+// Each example is loaded as its own ES module by index.html.
+// This marks the file as a module so its names stay in file scope.
+export {};

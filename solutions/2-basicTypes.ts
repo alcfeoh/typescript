@@ -8,3 +8,6 @@ function sayHello(person : string) {
     return "Hello, " + person;
 }
 
+// Each example is loaded as its own ES module by index.html.
+// This marks the file as a module so its names stay in file scope.
+export {};

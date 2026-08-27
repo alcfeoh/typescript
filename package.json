@@ -4,7 +4,10 @@
     "dev:app": "vite --config vite.app.config.ts",
     "build": "tsc && vite build",
     "build:app": "tsc && vite build --config vite.app.config.ts",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@types/jquery": "^3.5.16",
@@ -12,7 +15,9 @@
     "ag-grid-community": "^32.3.3"
   },
   "devDependencies": {
-    "typescript": "latest",
-    "vite": "latest"
+    "@vitest/coverage-v8": "^4.1.11",
+    "typescript": "^5.9.3",
+    "vite": "latest",
+    "vitest": "^4.1.11"
   }
 }

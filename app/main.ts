@@ -1,12 +1,12 @@
-import { Product } from './types';
-import { products } from './products-seed';
+import {getProducts} from "./products-store";
+import {Product} from "./types";
 
 const productListEl = document.getElementById('product-list');
 const productModal = document.getElementById('product-modal');
 const addProductBtn = document.getElementById('add-product-btn');
 const cancelBtn = document.getElementById('cancel-btn');
 
-function renderProducts() {
+function renderProducts(products: Product[]) {
   if (!productListEl) return;
   
   productListEl.innerHTML = '';
@@ -30,8 +30,9 @@ function renderProducts() {
   });
 }
 
+let products = getProducts();
 // Initial render
-renderProducts();
+renderProducts(products);
 
 // Modal logic (dummy implementations for students to fill out)
 addProductBtn?.addEventListener('click', () => {

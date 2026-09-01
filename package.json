@@ -11,9 +11,7 @@
     "typecheck": "tsc -p tsconfig.build.json"
   },
   "dependencies": {
-    "@types/jquery": "^3.5.16",
-    "ag-grid": "^18.1.2",
-    "ag-grid-community": "^32.3.3"
+
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^4.1.11",

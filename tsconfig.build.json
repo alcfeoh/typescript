@@ -19,7 +19,6 @@
     "dist",
     "coverage",
     "0-greeting.ts",
-    "1-greeting.ts",
-    "var-vs-let.ts"
+    "1-greeting.ts"
   ]
 }

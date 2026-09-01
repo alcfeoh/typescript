@@ -10,13 +10,11 @@
     "coverage": "vitest run --coverage",
     "typecheck": "tsc -p tsconfig.build.json"
   },
-  "dependencies": {
-
-  },
   "devDependencies": {
     "@vitest/coverage-v8": "^4.1.11",
     "typescript": "^5.9.3",
     "vite": "latest",
+    "vite-plugin-checker": "^0.14.5",
     "vitest": "^4.1.11"
   }
 }

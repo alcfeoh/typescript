@@ -4,4 +4,7 @@ export interface Product {
   description: string;
   price: number;
   brand?: string;
+  createdAt?: Date;
 }
+
+export type ProductId = Product["id"];

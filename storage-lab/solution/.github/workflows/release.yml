@@ -1,0 +1,41 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+concurrency: release-${{ github.ref }}
+
+permissions:
+  contents: write        # let changesets open/update the release PR
+  pull-requests: write
+  id-token: write        # REQUIRED for npm trusted publishing (OIDC)
+
+jobs:
+  release:
+    runs-on: ubuntu-latest   # trusted publishing needs a GitHub-hosted runner
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0     # changesets needs the history
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      # Trusted publishing needs npm >= 11.5.1 and Node >= 22.14
+      - run: npm install -g npm@latest
+      - run: npm ci
+      - run: npm run verify
+
+      # Either opens a "Version Packages" PR, or — once that PR is merged —
+      # publishes. No NPM_TOKEN anywhere: npm exchanges the OIDC token itself,
+      # and attaches a provenance attestation automatically.
+      - uses: changesets/action@v1
+        with:
+          version: npm run changeset:version
+          publish: npm run changeset:publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

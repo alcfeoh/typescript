@@ -1,0 +1,27 @@
+{
+  "name": "@formation-ts/typed-storage",
+  "version": "0.1.0",
+  "description": "A tiny, type-safe wrapper around one localStorage key.",
+  "license": "MIT",
+  "type": "module",
+  "___LAB___": "Nothing declares the public API yet. That is step 3 of the lab.",
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc --noEmit",
+    "smoke:esm": "node consumer/use-esm.mjs",
+    "smoke:cjs": "node consumer/use-cjs.cjs",
+    "smoke": "npm run smoke:esm && npm run smoke:cjs",
+    "check:exports": "publint && attw --pack .",
+    "verify": "npm run typecheck && npm run build && npm run smoke && npm run check:exports",
+    "changeset": "changeset",
+    "changeset:version": "changeset version && npm install --package-lock-only",
+    "changeset:publish": "npm run build && changeset publish"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
+    "publint": "^0.3.24",
+    "tsdown": "^0.23.0",
+    "typescript": "^5.9.3",
+    "@changesets/cli": "^3.0.2"
+  }
+}

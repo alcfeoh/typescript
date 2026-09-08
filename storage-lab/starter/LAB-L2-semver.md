@@ -4,11 +4,9 @@ Suite directe du lab L1 : même paquet, même `Storage<T>`. Il est emballé et v
 
 ---
 
-## Partie 1 — Quel bump ? (10 min, en groupe)
+## Partie 1 — Quel bump ? (10 min)
 
 `@formation-ts/typed-storage` est en **1.4.2**. Pour chacun de ces changements : `patch`, `minor` ou `major` ?
-
-Le piège du lab : dans une librairie **typée**, un changement de type est un changement d'API, même quand le JavaScript émis est identique.
 
 | # | Changement | Bump ? |
 | --- | --- | --- |
@@ -37,7 +35,7 @@ git diff                 # regardez précisément ce qui a bougé
 
 Vérifié : avec le changeset `minor` fourni, la version passe de **0.1.0 à 0.2.0** et un `CHANGELOG.md` est généré.
 
-`changeset publish` n'est **jamais** joué en salle. À la place :
+Essayez:
 
 ```bash
 npm publish --dry-run    # tout, sauf l'envoi
@@ -45,7 +43,7 @@ npm publish --dry-run    # tout, sauf l'envoi
 
 ---
 
-## Partie 3 — Le pipeline (10 min, lecture guidée)
+## Partie 3 — Le pipeline (10 min)
 
 Ouvrez `.github/workflows/release.yml`. Trouvez les **trois** conditions sans lesquelles le trusted publishing ne marche pas.
 

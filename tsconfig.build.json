@@ -19,6 +19,8 @@
     "dist",
     "coverage",
     "0-greeting.ts",
-    "1-greeting.ts"
+    "1-greeting.ts",
+    // Self-contained project with its own tsconfig, paths and tests (see pxo-filrouge/README.md).
+    "pxo-filrouge"
   ]
 }

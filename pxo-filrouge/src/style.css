@@ -1,0 +1,244 @@
+:root {
+  --bg: #f6f7fb;
+  --card: #ffffff;
+  --text: #1c2233;
+  --muted: #677089;
+  --accent: #4f46e5;
+  --error: #c62828;
+  --ok: #2e7d32;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--text);
+  color: white;
+}
+
+nav {
+  display: flex;
+  gap: 1rem;
+}
+
+nav a {
+  color: #c7cbe0;
+  text-decoration: none;
+}
+
+nav a[aria-current] {
+  color: white;
+  border-bottom: 2px solid var(--accent);
+}
+
+main {
+  max-width: 960px;
+  margin: 1.5rem auto;
+  padding: 0 1rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.08);
+}
+
+form label {
+  display: grid;
+  gap: 0.25rem;
+  margin-top: 0.75rem;
+  font-weight: 500;
+}
+
+form label.inline {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+input:not([type='checkbox'], [type='radio']),
+select {
+  padding: 0.5rem;
+  border: 1px solid #cfd3e1;
+  border-radius: 6px;
+  font: inherit;
+}
+
+button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: 0;
+  border-radius: 6px;
+  background: var(--accent);
+  color: white;
+  font: inherit;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+.error,
+.form-alert {
+  color: var(--error);
+  margin: 0.25rem 0 0;
+}
+
+.form-status {
+  color: var(--ok);
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.todo {
+  border-left: 4px solid #f59e0b;
+}
+
+img.avatar {
+  max-width: 160px;
+  border-radius: 50%;
+  margin-top: 1rem;
+}
+
+/* Chat */
+.messages {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.message {
+  max-width: 70%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 10px;
+  background: #eef0f7;
+}
+
+.message.mine {
+  justify-self: end;
+  background: #e0e7ff;
+}
+
+.message .author {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.message .text {
+  margin: 0.25rem 0;
+}
+
+.message .meta {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.message button.react {
+  margin: 0;
+  padding: 0 0.2rem;
+  background: none;
+  color: inherit;
+}
+
+.notices {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.typing {
+  min-height: 1.2em;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* Videos */
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.media-card {
+  position: relative;
+  background: var(--card);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.08);
+}
+
+.media-card img,
+.media-card video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.media-card video.preview {
+  position: absolute;
+  inset: 0 0 auto 0;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.media-card:hover video.preview {
+  opacity: 1;
+}
+
+.media-card h3 {
+  margin: 0.5rem 0.75rem 0;
+  font-size: 1rem;
+}
+
+.media-card .duration {
+  display: block;
+  margin: 0 0.75rem 0.75rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+#player:empty {
+  display: none;
+}
+
+#player video {
+  width: 100%;
+  max-height: 360px;
+  border-radius: 8px;
+  background: black;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.comments {
+  list-style: none;
+  padding: 0;
+}
+
+.comments li {
+  padding: 0.25rem 0;
+}

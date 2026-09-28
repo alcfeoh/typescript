@@ -1,0 +1,30 @@
+{
+  "name": "pxo-filrouge",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -p tsconfig.json",
+    "e2e": "playwright test",
+    "e2e:ui": "playwright test --ui",
+    "dev:solution": "node scripts/solution.mjs vite",
+    "test:solution": "node scripts/solution.mjs vitest run",
+    "typecheck:solution": "tsc -p solutions/tsconfig.json",
+    "e2e:solution": "node scripts/solution.mjs playwright test",
+    "verify:solution": "npm run typecheck:solution && npm run test:solution && npm run e2e:solution"
+  },
+  "dependencies": {
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^22.20.4",
+    "happy-dom": "^20.14.5",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.1",
+    "vitest": "^5.0.2"
+  },
+  "private": true,
+  "type": "module"
+}

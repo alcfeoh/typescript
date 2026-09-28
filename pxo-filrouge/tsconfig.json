@@ -1,0 +1,20 @@
+{
+  // Starter configuration: `@/x` → src/x. Used by the editor, `npm run typecheck`
+  // and the type-level tests (*.test-d.ts) run by Vitest.
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": ["node"],
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowImportingTsExtensions": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src", "tests", "build", "*.ts"]
+}

@@ -1,6 +1,6 @@
 # PXO — demi-journée pratique (fil rouge)
 
-Une petite application TypeScript vanilla, sans framework, construite avec Vite. Elle a cinq pages : connexion, inscription avec upload d'avatar, chat de support, vidéos et offres premium. Toute la demi-journée se passe dedans. **Il n'y a pas de slides.** Chaque étape est une modification de l'app, guidée par des tests qui passent du rouge au vert.
+Une petite application TypeScript, sans framework, construite avec Vite. Elle a cinq pages : connexion, inscription avec upload d'avatar, chat de support, vidéos et offres premium. Toute la demi-journée se passe dedans. **Il n'y a pas de slides.** Chaque étape est une modification de l'app, guidée par des tests qui passent du rouge au vert.
 
 | Horaire | Partie | Étapes | Notions principales |
 | --- | --- | --- | --- |

@@ -33,7 +33,7 @@ export type EventWithoutPayload = any; // TODO C2
 /**
  * The server groups events into batches. A batch MIXES event types:
  *   [message, typing, read]
- * This version compiles, but is wrong — see tests/2-chat/chat.test-d.ts, C3.
+ * This version compiles, but is wrong — see tests/2-chat/C3-batch.test-d.ts (npm run ex C3).
  */
 export type Batch<E> = E extends ChatEvent ? E[] : never; // TODO C3: fix it
 

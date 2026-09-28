@@ -23,7 +23,8 @@ npm run dev                       # http://localhost:5173
 | Commande | Ce qu'elle fait |
 | --- | --- |
 | `npm run dev` | l'app, avec le faux back-end (`/api/login`, `/api/signup`, `/api/avatar`) |
-| `npm run test:watch -- 2-chat` | les tests d'exécution **et** de types d'un dossier, en mode watch |
+| `npm run ex A1` | **les tests d'un seul exercice** (ici A1), en mode watch : ils se relancent à chaque sauvegarde |
+| `npm run ex:once A1` | la même chose, une seule fois |
 | `npm test` | tous les tests, une fois |
 | `npm run typecheck` | `tsc` sur tout le projet (app + tests) |
 | `npm run e2e` / `npm run e2e:ui` | Playwright (il démarre le serveur de dev tout seul) |
@@ -42,6 +43,7 @@ npm run dev                       # http://localhost:5173
 - **Deux sortes de tests :**
   - les fichiers `*.spec.ts` sont exécutés ;
   - les fichiers `*.test-d.ts` sont des tests de types. Ils ne sont jamais exécutés : Vitest les passe à `tsc` et transforme chaque erreur de type en test échoué. Par exemple, `Expected: literal number 1, Actual: any` veut dire que votre type vaut encore `any`.
+- **Un exercice = ses propres fichiers de tests**, nommés d'après lui : `tests/1-account/A1-signup-schema.spec.ts`, `tests/2-chat/C3-batch.test-d.ts`… `npm run ex A1` ne lance que ceux-là. Pour T2 et M5 (Playwright), `npm run ex T2` lance le test une fois ; `npm run e2e:ui` ouvre l'interface graphique de Playwright.
 - **Point de départ :** 79 en échec · 8 qui passent · 4 à écrire. Tout vert veut dire que le cas est terminé.
 - **Les imports passent par `@/` :** `@/chat/chat-bus` désigne `src/chat/chat-bus.ts`.
 
@@ -51,7 +53,8 @@ npm run dev                       # http://localhost:5173
 
 ### T1 — Échauffement Vitest : `tests/0-tests/typing-indicator.spec.ts`
 
-**Notions :** Vitest, fonctions espionnes (`vi.fn`), fausses horloges (`vi.useFakeTimers`), `ReturnType`
+**Notions :** Vitest, fonctions espionnes (`vi.fn`), fausses horloges (`vi.useFakeTimers`), `ReturnType`  
+**Lancer les tests :** `npm run ex T1`
 
 **Contexte :** dans le chat, l'autre personne voit « Léa est en train d'écrire… ». Envoyer un événement à chaque touche frappée inonderait le serveur. `src/chat/typing-indicator.ts` n'envoie donc « j'écris » qu'à la première frappe, puis « j'ai arrêté » après 2 s sans frappe. Ce module dépend du temps : attendre 2 vraies secondes rendrait les tests lents et fragiles.
 
@@ -61,13 +64,14 @@ npm run dev                       # http://localhost:5173
 
 Remarque sur le code testé : `ReturnType<typeof setTimeout>` est le bon type pour l'identifiant d'un timer, à la fois dans Node et dans le navigateur.
 
-### T2 — Playwright : `tests/e2e/login.e2e.ts`
+### T2 — Playwright : `tests/e2e/T2-login.e2e.ts`
 
-**Notions :** Playwright, locators accessibles (`getByRole`, `getByLabel`), assertions web-first, mock réseau (`page.route`), promesses
+**Notions :** Playwright, locators accessibles (`getByRole`, `getByLabel`), assertions web-first, mock réseau (`page.route`), promesses  
+**Lancer les tests :** `npm run ex T2`
 
 **Contexte :** la page `#/login` (`src/account/login-page.ts`) valide le formulaire avec Zod dans le navigateur, puis appelle `POST /api/login` sur le faux back-end. Les tests unitaires ne voient pas ce parcours complet. Playwright pilote un vrai Chromium sur l'app servie par Vite, comme le ferait un utilisateur : taper, cliquer, lire l'écran.
 
-**Démo (formateur) :** dérouler les deux premiers tests.
+**Démo du formateur :** les deux premiers tests.
 
 - Locators par rôle et par label : `getByLabel`, `getByRole`.
 - Assertions « web-first », qui réessaient toutes seules.
@@ -97,7 +101,8 @@ Remarque sur le code testé : `ReturnType<typeof setTimeout>` est le bon type po
 
 ### A1 — `SignupSchema` : `src/account/account-schema.ts`
 
-**Notions :** Zod v4 (`z.object`, `.refine` inter-champs, `z.enum`, `z.stringbool`, `z.literal` + `.transform`, `.pipe`), `z.input` vs `z.output`, `as const`
+**Notions :** Zod v4 (`z.object`, `.refine` inter-champs, `z.enum`, `z.stringbool`, `z.literal` + `.transform`, `.pipe`), `z.input` vs `z.output`, `as const`  
+**Lancer les tests :** `npm run ex A1`
 
 **Contexte :** la page lit le formulaire avec `FormData` : toutes les valeurs arrivent sous forme de chaînes, et une case non cochée n'arrive pas du tout. `SignupSchema` fait le pont entre ces données brutes et les données propres qu'on envoie à l'API. Il vérifie chaque champ et convertit ce qui doit l'être.
 
@@ -115,7 +120,8 @@ Trois champs sont faits. Ajoutez les autres ; les messages d'erreur attendus son
 
 ### A2 — `AvatarSchema` et `UploadSchema`
 
-**Notions :** Zod v4 (`z.file()` avec `.max` et `.mime`, `.optional()`)
+**Notions :** Zod v4 (`z.file()` avec `.max` et `.mime`, `.optional()`)  
+**Lancer les tests :** `npm run ex A2`
 
 **Contexte :** après l'inscription, un second formulaire permet d'envoyer une photo (`POST /api/avatar`). L'attribut `accept="image/*"` du champ fichier n'est qu'une suggestion au navigateur : l'utilisateur peut choisir n'importe quel fichier. On vérifie donc taille et type **avant** l'envoi, pour éviter un upload de 50 Mo refusé à l'arrivée.
 
@@ -125,7 +131,8 @@ Trois champs sont faits. Ajoutez les autres ; les messages d'erreur attendus son
 
 ### A3 — `validateForm`, un seul générique pour tous les formulaires : `src/shared/form.ts`
 
-**Notions :** génériques (paramètre contraint `S extends z.ZodType`, types dérivés du paramètre, 2 paramètres de type), `Record`, `Partial`, `Extract`, `keyof`, union discriminée
+**Notions :** génériques (paramètre contraint `S extends z.ZodType`, types dérivés du paramètre, 2 paramètres de type), `Record`, `Partial`, `Extract`, `keyof`, union discriminée  
+**Lancer les tests :** `npm run ex A3`
 
 **Contexte :** les deux formulaires de la page font la même chose : passer les données brutes dans un schéma, puis soit récupérer les données propres, soit afficher un message d'erreur sous chaque champ (`showFieldErrors`). Ouvrez `src/account/login-page.ts` : il fait ce travail à la main, en une dizaine de lignes. `validateForm` le fait une fois pour toutes, pour n'importe quel schéma — à condition que son type de retour suive le schéma qu'on lui passe.
 
@@ -138,7 +145,8 @@ Trois champs sont faits. Ajoutez les autres ; les messages d'erreur attendus son
 
 ### A4 — Des types dérivés d'un client d'API qu'on ne peut pas modifier : `src/account/account-types.ts`
 
-**Notions :** `ReturnType`, `Awaited`, `NonNullable`, `Parameters`, accès indexé (`T['user']`), `typeof` sur une fonction, `import type`
+**Notions :** `ReturnType`, `Awaited`, `NonNullable`, `Parameters`, accès indexé (`T['user']`), `typeof` sur une fonction, `import type`  
+**Lancer les tests :** `npm run ex A4`
 
 **Contexte :** `src/account/account-api.ts` regroupe les trois fonctions par lesquelles les pages parlent au back-end : `login`, `signup` et `uploadAvatar`. Chacune fait un `fetch` vers `/api/…` (servi par le faux back-end de `build/plugins.ts`) et renvoie la réponse. Par exemple, `signup` renvoie `{ user, token }`, ou `null` si l'e-mail est déjà pris. Dans un vrai projet, ce fichier serait **généré** à partir de la spécification OpenAPI du back-end (avec openapi-typescript, Orval…) : on ne le modifie pas, et il n'exporte aucun type nommé pour ses réponses — ils n'existent qu'en ligne, dans les signatures.
 
@@ -168,7 +176,8 @@ Or les pages ont besoin de ces types : `welcome.ts` affiche la session reçue ap
 
 ### C1 — `ChatEventType`, `EventOf<K>` : `src/chat/chat-types.ts`
 
-**Notions :** accès indexé sur une union, `Extract`, générique contraint (`K extends ChatEventType`)
+**Notions :** accès indexé sur une union, `Extract`, générique contraint (`K extends ChatEventType`)  
+**Lancer les tests :** `npm run ex C1`
 
 **Contexte :** tout le reste du chat a besoin de parler des événements par leur type : « les handlers de `typing` », « l'événement `read` ». Plutôt que de réécrire ces types à la main, on les dérive de `ChatEvent`. Ajoutez un événement au contrat, et tout ce qui en dépend suit.
 
@@ -177,7 +186,8 @@ Or les pages ont besoin de ces types : `welcome.ts` affiche la session reçue ap
 
 ### C2 — `PayloadOf<E>` et `EventWithoutPayload`
 
-**Notions :** types conditionnels, `infer`, distributivité, `never`
+**Notions :** types conditionnels, `infer`, distributivité, `never`  
+**Lancer les tests :** `npm run ex C2`
 
 **Contexte :** l'état du chat stocke des messages, pas des événements : il a besoin du contenu (`payload`) d'un événement `message`. `src/chat/chat-reducer.ts` définit `Message = PayloadOf<EventOf<'message'>>`. Certains événements (`ping`) n'ont pas de contenu.
 
@@ -186,7 +196,8 @@ Or les pages ont besoin de ces types : `welcome.ts` affiche la session reçue ap
 
 ### C3 — Le bug de `Batch<E>`
 
-**Notions :** types conditionnels, distributivité et comment la désactiver (`[E] extends […]`)
+**Notions :** types conditionnels, distributivité et comment la désactiver (`[E] extends […]`)  
+**Lancer les tests :** `npm run ex C3`
 
 **Contexte :** le serveur regroupe plusieurs événements dans une même frame, par exemple « Léa a arrêté d'écrire » + « nouveau message de Léa ». Un lot **mélange** donc les types d'événements. `Batch<ChatEvent>` est le type de retour du décodeur (C7).
 
@@ -197,7 +208,8 @@ Il compile, mais le test-d échoue avec `not assignable to parameter of type 'ne
 
 ### C4 — `OutgoingEvent`
 
-**Notions :** `Exclude`
+**Notions :** `Exclude`  
+**Lancer les tests :** `npm run ex C4`
 
 **Contexte :** le client envoie lui aussi des événements : ses messages, « j'écris », « lu », ses réactions. En revanche, `system` et `ping` ne viennent que du serveur. `OutgoingEvent` est le type du paramètre de `FakeChatServer.send()` : le compilateur empêche alors la page d'envoyer un événement réservé au serveur.
 
@@ -205,7 +217,8 @@ Tout sauf `system` et `ping`. Utilisez `Exclude`.
 
 ### C5 — Bus générique : `src/chat/chat-bus.ts`
 
-**Notions :** génériques (méthode générique, inférence depuis un littéral), narrowing, contravariance des paramètres, champs `#privés`
+**Notions :** génériques (méthode générique, inférence depuis un littéral), narrowing, contravariance des paramètres, champs `#privés`  
+**Lancer les tests :** `npm run ex C5`
 
 **Contexte :** certaines parties de la page doivent réagir à un type d'événement précis. Par exemple, quand un message de Léa arrive, la page renvoie un accusé de lecture ; une notification système de niveau `warning` part dans la console. Le bus distribue chaque événement aux fonctions abonnées à son type. Ouvrez `chat-page.ts` et cherchez `bus.on(` : aujourd'hui, `event` y vaut `any`.
 
@@ -216,7 +229,8 @@ Tout sauf `system` et `ping`. Utilisez `Exclude`.
 
 ### C6 — Reducer : `src/chat/chat-reducer.ts`
 
-**Notions :** unions discriminées, narrowing par `switch`, exhaustivité avec `never`, immutabilité (spread), `Partial<Record<…>>`
+**Notions :** unions discriminées, narrowing par `switch`, exhaustivité avec `never`, immutabilité (spread), `Partial<Record<…>>`  
+**Lancer les tests :** `npm run ex C6`
 
 **Contexte :** l'état affiché (messages, qui écrit, qui a lu, réactions, notifications) est recalculé à chaque événement par une fonction pure `(état, événement) → nouvel état`, puis la page réaffiche tout. Aujourd'hui, seul `message` est géré : pas d'indicateur « écrit… », pas de ✓✓, pas de réactions.
 
@@ -229,7 +243,8 @@ Gérez `typing` (sans doublons), `read` (une fois par lecteur), `reaction` (comp
 
 ### C7 — Valider à la frontière : `src/chat/chat-wire.ts`
 
-**Notions :** Zod v4 (`z.discriminatedUnion`, `z.templateLiteral`, `z.enum`, `safeParse`, `z.prettifyError`), `unknown`, template literal types, validation à l'exécution
+**Notions :** Zod v4 (`z.discriminatedUnion`, `z.templateLiteral`, `z.enum`, `safeParse`, `z.prettifyError`), `unknown`, template literal types, validation à l'exécution  
+**Lancer les tests :** `npm run ex C7`
 
 **Contexte :** tout ce qui précède repose sur l'idée que le serveur respecte `ChatEvent`. Mais les frames arrivent sous forme de texte, et `JSON.parse` renvoie `any` : rien ne garantit qu'un serveur d'une autre version, ou buggé, envoie ce qu'on attend. Les types TypeScript n'existent plus à l'exécution. C'est donc ici, à l'entrée, qu'on vérifie vraiment les données.
 
@@ -259,7 +274,8 @@ Gérez `typing` (sans doublons), `read` (une fois par lecteur), `reaction` (comp
 
 ### M1 — `mediaCard()` : `src/media/media-card.ts`
 
-**Notions :** templating (tag `html`, `SafeHtml`), template literal types (`${string}.avif`), `<picture>` / `<source>`
+**Notions :** templating (tag `html`, `SafeHtml`), template literal types (`${string}.avif`), `<picture>` / `<source>`  
+**Lancer les tests :** `npm run ex M1`
 
 **Contexte :** `media-page.ts` appelle `mediaCard(media)` pour chaque vidéo du catalogue (`CATALOG`, dans `media-types.ts`) et insère le HTML obtenu. PXO veut l'affiche en AVIF, plus léger, quand le navigateur le supporte, et en JPEG sinon. La balise `<picture>` règle ce choix sans aucun JavaScript.
 
@@ -275,7 +291,8 @@ Attention : `alt=${title}` sans guillemets s'arrête au premier espace.
 
 ### M2 — Le mixin `Previewable` : `src/media/player.ts`
 
-**Notions :** mixins, génériques contraints (`Constructor<T>` + intersection), champs `#privés`, décorateur `@logged` (déjà codé)
+**Notions :** mixins, génériques contraints (`Constructor<T>` + intersection), champs `#privés`, décorateur `@logged` (déjà codé)  
+**Lancer les tests :** `npm run ex M2`
 
 **Contexte :** l'extrait au survol et le grand lecteur utilisent la même classe, `VideoPlayer`. Elle est construite en empilant des mixins, chacun apportant une capacité : `Playable` (lecture/pause), `Seekable` (se déplacer dans la vidéo), `Audible` (volume). `Previewable` ajoute l'aperçu au survol, en se servant des méthodes des autres mixins. `media-page.ts` appelle `startPreview()` quand la souris entre sur la carte, et `stopPreview()` quand elle sort.
 
@@ -288,7 +305,8 @@ Attention : `alt=${title}` sans guillemets s'arrête au premier espace.
 
 ### M3 — Le décorateur de setter `@clamp(min, max)` : `src/shared/clamp.ts`
 
-**Notions :** décorateurs standards (setter, `ClassSetterDecoratorContext`), fabrique de décorateur, générique `This`
+**Notions :** décorateurs standards (setter, `ClassSetterDecoratorContext`), fabrique de décorateur, générique `This`  
+**Lancer les tests :** `npm run ex M3`
 
 **Contexte :** les boutons 🔉 / 🔊 et les flèches ↑ ↓ appellent `changeVolume(±0.1)`. Le navigateur n'accepte qu'un volume entre 0 et 1 : au-delà, il lève une erreur. Plutôt que de vérifier la valeur à chaque appel, on la borne une seule fois, sur le setter `volume` du mixin `Audible`, avec un décorateur.
 
@@ -299,7 +317,8 @@ Décorateurs standards, sans `experimentalDecorators`.
 
 ### M4 (s'il reste du temps) — Raccourcis clavier typés à partir de la classe : `src/media/player-remote.ts`
 
-**Notions :** mapped types, types conditionnels, `infer`, `keyof`, tuples variadiques (`[C, ...Args]`), `satisfies`, `Parameters`
+**Notions :** mapped types, types conditionnels, `infer`, `keyof`, tuples variadiques (`[C, ...Args]`), `satisfies`, `Parameters`  
+**Lancer les tests :** `npm run ex M4`
 
 **Contexte :** `SHORTCUTS` associe une touche à une commande du lecteur et à ses arguments : `ArrowRight → ['skip', 5]`. Aujourd'hui, c'est typé `any` : une faute de frappe (`'skp'`) ou un argument du mauvais type ne se voient qu'au moment où l'on appuie sur la touche. On veut que la liste des commandes et de leurs arguments soit **dérivée** de la classe `VideoPlayer`.
 
@@ -307,9 +326,10 @@ Décorateurs standards, sans `experimentalDecorators`.
 - `ArgsOf<T, K>` : avec `infer`, car `Parameters<T[K]>` ne compile pas ici. Pourquoi ?
 - `Shortcut` : `['skip', 5]` ✅, `['skip', '5']` ❌, `['seek']` ❌.
 
-### M5 (optionnel) — Playwright : `tests/e2e/media.e2e.ts`
+### M5 (optionnel) — Playwright : `tests/e2e/M5-media.e2e.ts`
 
-**Notions :** Playwright (`hover`, `locator.evaluate`, `expect.poll`)
+**Notions :** Playwright (`hover`, `locator.evaluate`, `expect.poll`)  
+**Lancer les tests :** `npm run ex M5`
 
 **Contexte :** les tests de M1 vérifient le HTML produit, mais `happy-dom` ne décode ni images ni vidéos. Seul un vrai navigateur peut confirmer qu'il a choisi l'AVIF et que l'extrait joue.
 
@@ -322,48 +342,19 @@ Décorateurs standards, sans `experimentalDecorators`.
 
 - **B1 — `src/shared/search.ts` :** le formulaire d'inscription a un champ « Search a country » qui filtre la liste des pays. Il appelle `searchBy(COUNTRIES, 'name', saisie)`. Écrivez `KeysMatching<T, V>` et rendez `searchBy(items, key, query)` générique : `key` doit être une propriété de type chaîne. Tant que ce n'est pas fait, la liste n'est pas filtrée.
   - **Notions :** génériques à 2 paramètres (`K extends KeysMatching<T, string>`), mapped types, types conditionnels, `never`
+  - **Lancer les tests :** `npm run ex B1`
 - **B2 — `src/premium/offers.ts` :** la page `#/premium` affiche les formules (gratuite, mensuelle, annuelle, à vie) et le coût mensuel de celle qu'on choisit.
   - `PaidOffer` avec `Exclude` ;
   - `monthlyCost` et `priceLabel`, tous deux exhaustifs (`never`).
   - **Notions :** `Exclude`, unions discriminées, exhaustivité avec `never`, `as const satisfies`
+  - **Lancer les tests :** `npm run ex B2`
 - **B3 — `src/comments/comments.ts` :** les commentaires, affichés sous le lecteur, sont en fil de discussion : chaque commentaire peut avoir des réponses, qui ont elles-mêmes des réponses.
   - un schéma Zod récursif, avec un getter ;
   - `countNodes` / `flattenTree` génériques sur n'importe quel arbre : `T extends { replies: readonly T[] }` ;
   - le fil de la deuxième vidéo contient une réponse invalide, et la page le signale.
   - **Notions :** types récursifs, schéma Zod récursif (getter), génériques F-bounded, `z.templateLiteral`
+  - **Lancer les tests :** `npm run ex B3`
 
 ---
 
-## Notes formateur
-
-**Les solutions** sont dans `solutions/`, avec les mêmes chemins que `src/` et `tests/`.
-
-- En mode solution, `@/x` pointe vers `solutions/x` quand ce fichier existe, et vers `src/x` sinon.
-  - Plugin Vite : `build/plugins.ts`.
-  - `tsc` : `paths` dans `solutions/tsconfig.json`.
-- Commandes utiles :
-  - `npm run dev:solution` : l'app terminée, sur le port 5174.
-  - `npm run verify:solution` : typecheck, puis tous les tests (91 verts), puis Playwright (15 verts).
-  - Pour montrer la solution d'une étape : `diff src/chat/chat-types.ts solutions/chat/chat-types.ts`.
-
-**Couverture de la demande de PXO :**
-
-| Demandé | Où |
-| --- | --- |
-| Génériques, cas d'usage variés | A3 (fonction typée par un schéma, 2 paramètres de type dérivés), C5 (clé → handler affiné), M2 (mixin contraint), M4, B1 (`K extends KeysMatching<T, string>`), B3 (F-bounded `T extends { replies: T[] }`) |
-| infer / conditional / distributive | C2 (`infer`, distribution), C3 (la distribution comme bug, `[E]`), M4 (`ArgsOf`), B1 |
-| Zod v4 | A1 (`refine`, `stringbool`, `enum`, `pipe`, entrée vs sortie), A2 (`z.file`), C7 (`discriminatedUnion`, `templateLiteral`, `prettifyError`), B3 (getter récursif) |
-| Exclude / Extract / NonNullable / ReturnType / Parameters / Awaited / never | C4, B2 / C1, A3 / A4 / A4 / A4, M4 / A4 / C2, C6, B2 |
-| Templating (déjà codé) | tag `html` (Module B) dans toutes les pages, M1 ; template literal types (`usr_${string}`, `${string}.avif`) |
-| Unions discriminées (déjà codées) | `ChatEvent`, `Offer`, `FormResult` |
-| Mixins + décorateurs (déjà codés) | `Playable` / `Seekable` / `Audible`, `@logged` ; M2 et M3 à écrire |
-
-**Ce qui va sortir en séance :**
-
-- **Décorateurs standards et Vite 8.** Vite 8 compile le TypeScript avec Oxc, qui ne sait transformer que les décorateurs legacy.
-  - `build/plugins.ts` (`standardDecorators`) passe `ts.transpileModule` sur les fichiers qui contiennent un décorateur.
-  - Bonne occasion de répondre à « qui compile quoi ? ».
-- **`z.email().trim()`** valide avant de trimer. Normaliser d'abord : `z.string().trim().toLowerCase().pipe(z.email())`.
-- **`Intl.NumberFormat('fr-FR')`** met une espace fine insécable (U+202F) avant `€`. Le test de B2 normalise les espaces.
-- **`preload="none"`** : `duration` vaut `NaN` tant que les métadonnées ne sont pas chargées. `Seekable.seek` se replie sur 0 ; affecter `currentTime = NaN` lève une erreur.
-- **Le Chromium de Playwright et le H.264.** Vérifié avec Playwright 1.63 : son Chromium lit l'aperçu MP4 (H.264). Les anciennes versions de Playwright, basées sur le Chromium open source, ne le lisaient pas. Le `<video>` propose de toute façon une source WebM en repli.
+Formateur : voir [`formateur-README.md`](formateur-README.md) (déroulé minuté, réponses, pièges, mode solution).

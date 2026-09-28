@@ -1,5 +1,5 @@
 // Solution-only end-to-end checks: the whole app works once every exercise is done.
-// Run with `npm run e2e:solution`. media.e2e.ts is also the solution of the optional M5 exercise.
+// Run with `npm run e2e:solution`. M5-media.e2e.ts is also the solution of the optional M5 exercise.
 import { expect, test } from '@playwright/test';
 
 test.describe('Case 1 — sign-up & avatar', () => {

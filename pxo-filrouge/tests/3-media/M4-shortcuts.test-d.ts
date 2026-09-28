@@ -1,22 +1,10 @@
 /**
- * Case 3 — Videos: type-level tests (M2 constraint, M4).
+ * M4 — commands typed from the class — type-level test: checked by tsc, never executed.
+ * Run: npm run ex M4
  */
 import { describe, expectTypeOf, it } from 'vitest';
-import { BasePlayer, Playable, Previewable, Seekable, type VideoPlayer } from '@/media/player';
+import { type VideoPlayer } from '@/media/player';
 import type { ArgsOf, MethodKeys, PlayerCommand, Shortcut } from '@/media/player-remote';
-
-describe('M2 — Previewable is a constrained mixin', () => {
-  it('accepts a base that can play and seek', () => {
-    Previewable(Seekable(Playable(BasePlayer)));
-  });
-
-  it('rejects a base that cannot', () => {
-    // @ts-expect-error — BasePlayer has no play() / pause() / seek()
-    Previewable(BasePlayer);
-    // @ts-expect-error — Playable alone cannot seek()
-    Previewable(Playable(BasePlayer));
-  });
-});
 
 describe('M4 — commands typed from the class', () => {
   it('MethodKeys keeps the methods only', () => {

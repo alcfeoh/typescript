@@ -1,6 +1,6 @@
 # PXO — fil rouge : notes du formateur
 
-Ce document accompagne `README.md`, qui est le support des stagiaires (contexte, consignes, commandes). Ici : la préparation, le déroulé minuté, la réponse attendue et les pièges de chaque étape, le mode solution, et les points techniques qui vont sortir en séance.
+Ce document accompagne `README.html` (à ouvrir dans un navigateur), qui est le support des stagiaires (contexte, consignes, commandes). Ici : la préparation, le déroulé minuté, la réponse attendue et les pièges de chaque étape, le mode solution, et les points techniques qui vont sortir en séance.
 
 **Public :** le même groupe que la formation TypeScript avancé de 2 jours. La demi-journée sert à **pratiquer** : pas de nouvelles slides, les notions ont déjà été vues.
 

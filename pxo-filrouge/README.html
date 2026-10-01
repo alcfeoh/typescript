@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PXO — fil rouge TypeScript</title>
+<style>
+:root {
+  --bg: #f7f7f5; --surface: #ffffff; --text: #1f2328; --muted: #5f6670; --border: #e3e3df;
+  --accent: #4f46e5; --accent-soft: #eef0ff;
+  --context: #f3f4f6; --goal-bg: #eef6ff; --goal: #1d64c2;
+  --check-bg: #ecfdf3; --check: #16794a; --try-bg: #fff7e8; --try: #a1590a;
+  --code-bg: #f1f1ee; --code: #b42359;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15171a; --surface: #1c1f23; --text: #e6e6e3; --muted: #9aa0a8; --border: #2e3238;
+    --accent: #8b87ff; --accent-soft: #24234a;
+    --context: #22252a; --goal-bg: #172536; --goal: #79b4ff;
+    --check-bg: #132a1f; --check: #5fd39a; --try-bg: #2d2416; --try: #f0b45a;
+    --code-bg: #262a30; --code: #ff8fb8;
+  }
+}
+* { box-sizing: border-box; }
+html { scroll-padding-top: 16px; }
+body { margin: 0; background: var(--bg); color: var(--text);
+  font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 28px 24px 20px; }
+header .inner { max-width: 1180px; margin: 0 auto; }
+header h1 { margin: 0; font-size: 1.7rem; letter-spacing: -0.01em; }
+header p { margin: 4px 0 0; color: var(--muted); }
+.layout { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 40px; padding: 24px; }
+nav { position: sticky; top: 16px; align-self: start; max-height: calc(100vh - 32px); overflow-y: auto; font-size: 0.9rem; }
+nav ul { list-style: none; margin: 0; padding: 0; }
+nav a { display: block; padding: 3px 8px; border-radius: 6px; color: var(--muted); text-decoration: none; }
+nav a:hover { background: var(--accent-soft); color: var(--text); }
+nav .toc-h2 { margin-top: 10px; }
+nav .toc-h2 a { color: var(--text); font-weight: 600; }
+nav .toc-h3 a { padding-left: 10px; }
+nav .step { display: inline-block; min-width: 2.2em; margin-right: 6px; font: 600 0.78rem ui-monospace, Menlo, Consolas, monospace;
+  color: var(--accent); }
+nav a.active { background: var(--accent-soft); color: var(--text); }
+nav summary { display: none; }
+main { min-width: 0; }
+h2 { font-size: 1.45rem; margin: 48px 0 12px; padding-top: 8px; border-top: 2px solid var(--border); }
+main > h2:first-child { margin-top: 0; border-top: 0; }
+h3 { font-size: 1.15rem; margin: 36px 0 10px; padding: 10px 14px; background: var(--surface);
+  border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; }
+p, ul, ol { margin: 0 0 12px; }
+li { margin: 3px 0; }
+li > ul, li > ol { margin: 4px 0 6px; }
+a { color: var(--accent); }
+code { overflow-wrap: anywhere; font: 0.88em ui-monospace, "SF Mono", Menlo, Consolas, monospace; background: var(--code-bg);
+  color: var(--code); padding: 1px 5px; border-radius: 4px; }
+pre { background: var(--code-bg); padding: 14px 16px; border-radius: 8px; overflow-x: auto; }
+pre code { background: none; color: var(--text); padding: 0; }
+.table-wrap { overflow-x: auto; margin: 0 0 16px; }
+table { border-collapse: collapse; width: 100%; background: var(--surface); font-size: 0.93rem; }
+th, td { border: 1px solid var(--border); padding: 7px 10px; text-align: left; vertical-align: top; }
+th { background: var(--context); }
+p.meta { color: var(--muted); font-size: 0.92rem; }
+p.meta strong { color: var(--text); }
+.context { background: var(--context); padding: 12px 16px; border-radius: 8px; }
+.goal { background: var(--goal-bg); padding: 12px 16px; border-radius: 8px; border-left: 4px solid var(--goal); }
+.check { background: var(--check-bg); padding: 12px 16px; border-radius: 8px; border-left: 4px solid var(--check); }
+.check ul { margin-bottom: 0; }
+.try, .reminder { background: var(--try-bg); padding: 12px 16px; border-radius: 8px; border-left: 4px solid var(--try); }
+.try ol, .reminder ul { margin-bottom: 0; }
+div.check > p, div.try > p, div.reminder > p { margin-bottom: 6px; }
+hr { display: none; }
+@media (max-width: 860px) {
+  html { scroll-padding-top: 64px; }
+  .layout { grid-template-columns: 1fr; gap: 8px; padding: 16px; }
+  nav { position: sticky; top: 0; z-index: 2; max-height: 70vh; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; }
+  nav summary { display: block; cursor: pointer; font-weight: 600; padding: 4px; }
+  header { padding: 20px 16px 16px; }
+}
+@media print { nav { display: none; } .layout { display: block; } }
+</style>
+</head>
+<body>
+<header><div class="inner"><h1>PXO — demi-journée pratique (fil rouge)</h1><p>Support des stagiaires — consignes, contexte et commandes de chaque exercice</p></div></header>
+<div class="layout">
+<nav aria-label="Sommaire"><details id="toc" open><summary>Sommaire — aller à un exercice</summary><ul>
+<li class="toc-h2"><a href="#installation-avant-la-session">Installation (avant la session)</a></li>
+<li class="toc-h2"><a href="#l-application-en-deux-minutes">L&#x27;application en deux minutes</a></li>
+<li class="toc-h2"><a href="#comment-fonctionnent-les-exercices">Comment fonctionnent les exercices</a></li>
+<li class="toc-h2"><a href="#partie-0-tests-30-min">Partie 0 — Tests (30 min)</a></li>
+<li class="toc-h3"><a href="#t1"><span class="step">T1</span>Vitest</a></li>
+<li class="toc-h3"><a href="#t2"><span class="step">T2</span>Playwright</a></li>
+<li class="toc-h2"><a href="#cas-1-compte-45-min-inscription-upload-d-avatar">Cas 1 — Compte (45 min)</a></li>
+<li class="toc-h3"><a href="#a1"><span class="step">A1</span>SignupSchema</a></li>
+<li class="toc-h3"><a href="#a2"><span class="step">A2</span>Upload d&#x27;avatar</a></li>
+<li class="toc-h3"><a href="#a3"><span class="step">A3</span>validateForm générique</a></li>
+<li class="toc-h3"><a href="#a4"><span class="step">A4</span>Types dérivés de l&#x27;API</a></li>
+<li class="toc-h2"><a href="#cas-2-chat-55-min">Cas 2 — Chat (55 min)</a></li>
+<li class="toc-h3"><a href="#c1"><span class="step">C1</span>EventOf</a></li>
+<li class="toc-h3"><a href="#c2"><span class="step">C2</span>PayloadOf (infer)</a></li>
+<li class="toc-h3"><a href="#c3"><span class="step">C3</span>Le bug de Batch</a></li>
+<li class="toc-h3"><a href="#c4"><span class="step">C4</span>OutgoingEvent</a></li>
+<li class="toc-h3"><a href="#c5"><span class="step">C5</span>Bus générique</a></li>
+<li class="toc-h3"><a href="#c6"><span class="step">C6</span>Reducer exhaustif</a></li>
+<li class="toc-h3"><a href="#c7"><span class="step">C7</span>Validation Zod</a></li>
+<li class="toc-h2"><a href="#cas-3-videos-40-min">Cas 3 — Vidéos (40 min)</a></li>
+<li class="toc-h3"><a href="#m1"><span class="step">M1</span>Carte vidéo</a></li>
+<li class="toc-h3"><a href="#m2"><span class="step">M2</span>Mixin Previewable</a></li>
+<li class="toc-h3"><a href="#m3"><span class="step">M3</span>Décorateur @clamp</a></li>
+<li class="toc-h3"><a href="#m4"><span class="step">M4</span>Raccourcis clavier</a></li>
+<li class="toc-h3"><a href="#m5"><span class="step">M5</span>Playwright (médias)</a></li>
+<li class="toc-h2"><a href="#bonus">Bonus</a></li>
+<li class="toc-h3"><a href="#b1"><span class="step">B1</span>Recherche de pays</a></li>
+<li class="toc-h3"><a href="#b2"><span class="step">B2</span>Offres premium</a></li>
+<li class="toc-h3"><a href="#b3"><span class="step">B3</span>Commentaires</a></li>
+</ul></details></nav>
+<main>
+<p>Une petite application TypeScript, sans framework, construite avec Vite. Elle a cinq pages : connexion, inscription avec upload d'avatar, chat de support, vidéos et offres premium. Toute la demi-journée se passe dedans. <strong>Il n'y a pas de slides.</strong> Chaque étape est une modification de l'app, guidée par des tests qui passent du rouge au vert.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Horaire</th>
+<th>Partie</th>
+<th>Étapes</th>
+<th>Notions principales</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0:00 – 0:30</td>
+<td><strong>Tests</strong></td>
+<td>T1 Vitest (10 min) · T2 Playwright (20 min)</td>
+<td>fake timers, E2E, mock réseau</td>
+</tr>
+<tr>
+<td>0:30 – 1:15</td>
+<td><strong>Cas 1 : Compte</strong></td>
+<td>A1 → A4</td>
+<td>Zod v4, génériques, <code>ReturnType</code> / <code>Awaited</code> / <code>NonNullable</code> / <code>Parameters</code></td>
+</tr>
+<tr>
+<td>1:15 – 2:10</td>
+<td><strong>Cas 2 : Chat</strong> (le cœur)</td>
+<td>C1 → C7</td>
+<td><code>Extract</code>, <code>Exclude</code>, <code>infer</code>, types conditionnels et distributifs, <code>never</code>, bus générique, <code>z.discriminatedUnion</code></td>
+</tr>
+<tr>
+<td>2:10 – 2:50</td>
+<td><strong>Cas 3 : Vidéos</strong></td>
+<td>M1 → M3 (M4, M5 s'il reste du temps)</td>
+<td>templating, <code>&lt;picture&gt;</code> AVIF/JPEG, mixins, décorateurs, <code>infer</code></td>
+</tr>
+<tr>
+<td>2:50 – 3:00</td>
+<td>Bilan</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Pour les plus rapides</td>
+<td><strong>Bonus</strong></td>
+<td>B1 · B2 · B3</td>
+<td><code>KeysMatching</code>, exhaustivité, types et schémas récursifs</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="installation-avant-la-session">Installation (avant la session)</h2>
+<pre><code class="language-bash">cd pxo-filrouge
+npm install
+npx playwright install chromium   # ~150 Mo à télécharger : à faire avant la session, pas pendant
+npm run dev                       # http://localhost:5173
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Commande</th>
+<th>Ce qu'elle fait</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>npm run dev</code></td>
+<td>l'app, avec le faux back-end (<code>/api/login</code>, <code>/api/signup</code>, <code>/api/avatar</code>)</td>
+</tr>
+<tr>
+<td><code>npm run ex A1</code></td>
+<td><strong>les tests d'un seul exercice</strong> (ici A1), en mode watch : ils se relancent à chaque sauvegarde</td>
+</tr>
+<tr>
+<td><code>npm run ex:once A1</code></td>
+<td>la même chose, une seule fois</td>
+</tr>
+<tr>
+<td><code>npm test</code></td>
+<td>tous les tests, une fois</td>
+</tr>
+<tr>
+<td><code>npm run typecheck</code></td>
+<td><code>tsc</code> sur tout le projet (app + tests)</td>
+</tr>
+<tr>
+<td><code>npm run e2e</code> / <code>npm run e2e:ui</code></td>
+<td>Playwright (il démarre le serveur de dev tout seul)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="l-application-en-deux-minutes">L'application en deux minutes</h2>
+<ul>
+<li><strong>Pas de framework :</strong> chaque page est une fonction <code>mountXxx(root)</code> qui écrit son HTML avec le tag <code>html</code> (<code>src/shared/html.ts</code>) et branche ses écouteurs d'événements. Le routeur est dans <code>src/main.ts</code> (<code>#/login</code>, <code>#/signup</code>, <code>#/chat</code>, <code>#/media</code>, <code>#/premium</code>).</li>
+<li><strong>Pas de vrai serveur :</strong> le serveur de dev Vite répond lui-même aux requêtes <code>POST /api/login</code>, <code>/api/signup</code> et <code>/api/avatar</code>. Ce faux back-end est écrit dans <code>build/plugins.ts</code> (<code>fakeBackend</code>). Le chat n'utilise pas de vrai WebSocket : <code>src/chat/fake-server.ts</code> simule un serveur qui pousse des messages.</li>
+<li><strong>Un dossier par fonctionnalité :</strong> <code>src/account/</code>, <code>src/chat/</code>, <code>src/media/</code>, <code>src/premium/</code>, <code>src/comments/</code>. Ce qui est partagé est dans <code>src/shared/</code>.</li>
+</ul>
+<h2 id="comment-fonctionnent-les-exercices">Comment fonctionnent les exercices</h2>
+<ul>
+<li><strong>Chaque exercice est marqué <code>TODO &lt;étape&gt;</code></strong> dans <code>src/</code>. <code>grep -rn &quot;TODO C3&quot; src</code> le retrouve.</li>
+<li><strong>Les types à écrire valent <code>any</code> au départ.</strong> Tout compile, mais rien n'est vérifié. Votre travail : les remplacer.</li>
+<li><strong>Les fonctions à écrire appellent <code>todo('C5')</code>.</strong> Cela lève une erreur, et la page affiche <code>⚠️ Exercise C5 is not done yet</code>.</li>
+<li><strong>Deux sortes de tests :</strong>
+<ul>
+<li>les fichiers <code>*.spec.ts</code> sont exécutés ;</li>
+<li>les fichiers <code>*.test-d.ts</code> sont des tests de types. Ils ne sont jamais exécutés : Vitest les passe à <code>tsc</code> et transforme chaque erreur de type en test échoué. Par exemple, <code>Expected: literal number 1, Actual: any</code> veut dire que votre type vaut encore <code>any</code>.</li>
+</ul>
+</li>
+<li><strong>Un exercice = ses propres fichiers de tests</strong>, nommés d'après lui : <code>tests/1-account/A1-signup-schema.spec.ts</code>, <code>tests/2-chat/C3-batch.test-d.ts</code>… <code>npm run ex A1</code> ne lance que ceux-là. Pour T2 et M5 (Playwright), <code>npm run ex T2</code> lance le test une fois ; <code>npm run e2e:ui</code> ouvre l'interface graphique de Playwright.</li>
+<li><strong>Point de départ :</strong> 79 en échec · 8 qui passent · 4 à écrire. Tout vert veut dire que le cas est terminé.</li>
+<li><strong>Les imports passent par <code>@/</code> :</strong> <code>@/chat/chat-bus</code> désigne <code>src/chat/chat-bus.ts</code>.</li>
+</ul>
+<hr />
+<h2 id="partie-0-tests-30-min">Partie 0 — Tests (30 min)</h2>
+<h3 id="t1">T1 — Échauffement Vitest : <code>tests/0-tests/typing-indicator.spec.ts</code></h3>
+<p class="meta"><strong>Notions :</strong> Vitest, fonctions espionnes (<code>vi.fn</code>), fausses horloges (<code>vi.useFakeTimers</code>), <code>ReturnType</code><br />
+<strong>Lancer les tests :</strong> <code>npm run ex T1</code></p>
+<p class="context"><strong>Contexte :</strong> dans le chat, l'autre personne voit « Léa est en train d'écrire… ». Envoyer un événement à chaque touche frappée inonderait le serveur. <code>src/chat/typing-indicator.ts</code> n'envoie donc « j'écris » qu'à la première frappe, puis « j'ai arrêté » après 2 s sans frappe. Ce module dépend du temps : attendre 2 vraies secondes rendrait les tests lents et fragiles.</p>
+<p class="goal"><strong>Ce que vous allez faire :</strong> écrire quatre tests qui vérifient ce comportement, sans jamais attendre réellement.</p>
+<p><strong>Étapes :</strong></p>
+<ol>
+<li><strong>Lisez le premier test</strong>, déjà écrit. Il crée une fonction espionne avec <code>vi.fn()</code> : une fausse fonction qui enregistre chacun de ses appels. On la passe à <code>createTypingIndicator</code> à la place du vrai callback, puis on vérifie avec <code>toHaveBeenCalledWith(true)</code> qu'elle a été appelée avec <code>true</code>.</li>
+<li><strong>Remarquez le <code>vi.useFakeTimers()</code></strong> dans <code>beforeEach</code>. À partir de là, <code>setTimeout</code> ne s'exécute plus tout seul : c'est le test qui fait avancer le temps, avec <code>vi.advanceTimersByTime(ms)</code>. Deux secondes passent ainsi en une microseconde.</li>
+<li><strong>Remplacez chaque <code>it.todo('…')</code> par un vrai <code>it('…', () =&gt; { … })</code></strong>, en gardant le même titre. Pour chacun :
+<ul>
+<li>créez l'espion et l'indicateur, comme dans le premier test ;</li>
+<li>simulez des frappes avec <code>indicator.keystroke()</code> et faites avancer le temps ;</li>
+<li>vérifiez le nombre d'appels (<code>toHaveBeenCalledTimes</code>) et la valeur du dernier appel (<code>toHaveBeenLastCalledWith</code>).</li>
+</ul>
+</li>
+<li><strong>Pour « pas une milliseconde avant »</strong>, avancez de 1999 ms et vérifiez que rien n'a changé, puis de 1 ms et vérifiez que <code>false</code> est arrivé.</li>
+</ol>
+<p class="check"><strong>Vérifier :</strong> <code>npm run ex T1</code> affiche 5 tests verts.</p>
+<p>Remarque sur le code testé : <code>ReturnType&lt;typeof setTimeout&gt;</code> est le bon type pour l'identifiant d'un timer, à la fois dans Node et dans le navigateur.</p>
+<h3 id="t2">T2 — Playwright : <code>tests/e2e/T2-login.e2e.ts</code></h3>
+<p class="meta"><strong>Notions :</strong> Playwright, locators accessibles (<code>getByRole</code>, <code>getByLabel</code>), assertions web-first, mock réseau (<code>page.route</code>), promesses<br />
+<strong>Lancer les tests :</strong> <code>npm run ex T2</code></p>
+<p class="context"><strong>Contexte :</strong> la page <code>#/login</code> (<code>src/account/login-page.ts</code>) valide le formulaire avec Zod dans le navigateur, puis appelle <code>POST /api/login</code> sur le faux back-end. Les tests unitaires ne voient pas ce parcours complet. Playwright pilote un vrai Chromium sur l'app servie par Vite, comme le ferait un utilisateur : taper, cliquer, lire l'écran.</p>
+<div class="reminder"><p><strong>Démo du formateur :</strong> les deux premiers tests. Retenez-en trois outils :</p>
+<ul>
+<li><strong>Les locators</strong> trouvent un élément comme le ferait un utilisateur : <code>page.getByLabel('Email')</code> trouve le champ dont le libellé est « Email », <code>page.getByRole('button', { name: 'Log in' })</code> le bouton « Log in ».</li>
+<li><strong>Les assertions « web-first »</strong> comme <code>await expect(locator).toHaveText('…')</code> réessaient pendant 5 s jusqu'à ce que la condition soit vraie. Pas besoin d'attendre à la main que la réponse du serveur arrive.</li>
+<li><strong><code>page.route('**/api/login', handler)</code></strong> intercepte les requêtes du navigateur vers cette URL. Le handler peut répondre à la place du serveur (<code>route.fulfill(…)</code>) ou laisser passer la requête (<code>route.continue()</code>).</li>
+</ul></div>
+<p class="goal"><strong>Ce que vous allez faire :</strong> transformer les trois <code>test.fixme</code> en vrais tests. <code>test.fixme</code> marque un test comme « à écrire » : Playwright l'ignore. Remplacez <code>test.fixme</code> par <code>test</code> et écrivez le corps.</p>
+<p><strong>Étapes :</strong></p>
+<ol>
+<li><strong>T2.a — Un e-mail invalide n'envoie rien au serveur.</strong>
+<ul>
+<li>Avant de remplir le formulaire, posez un <code>page.route('**/api/login', …)</code> dont le handler incrémente un compteur, puis appelle <code>route.continue()</code>.</li>
+<li>Remplissez l'e-mail avec <code>not-an-email</code>, un mot de passe quelconque, et cliquez sur « Log in ».</li>
+<li>Vérifiez que le message <code>Invalid email</code> est visible (<code>getByText('Invalid email', { exact: true })</code> : sans <code>exact</code>, il trouverait aussi « Invalid email or password »).</li>
+<li>Vérifiez que le compteur vaut toujours 0.</li>
+</ul>
+</li>
+<li><strong>T2.b — Un mauvais mot de passe affiche une erreur.</strong> Le faux back-end répond 401 à tout sauf aux identifiants de démo. Connectez-vous avec <code>demo@pxo.fr</code> et un mauvais mot de passe, puis vérifiez que <code>page.getByRole('alert')</code> affiche <code>Invalid email or password</code>.</li>
+<li><strong>T2.c — Le bouton est désactivé pendant la requête.</strong> Il faut « geler » le serveur le temps de regarder le bouton :
+<ul>
+<li>créez une promesse que vous résoudrez vous-même : <code>let release!: () =&gt; void; const released = new Promise&lt;void&gt;((r) =&gt; (release = r));</code></li>
+<li>dans <code>page.route</code>, attendez-la (<code>await released</code>) avant d'appeler <code>route.continue()</code> ;</li>
+<li>cliquez sur « Log in », vérifiez <code>toBeDisabled()</code>, appelez <code>release()</code>, puis vérifiez <code>toBeEnabled()</code>.</li>
+</ul>
+</li>
+</ol>
+<p class="check"><strong>Vérifier :</strong> <code>npm run ex T2</code> affiche 5 tests verts.</p>
+<p><strong>Comptes de démo :</strong></p>
+<ul>
+<li>Pour se connecter : <code>demo@pxo.fr</code> / <code>correct-horse-battery-staple</code>.</li>
+<li>Pour s'inscrire : cet e-mail est « déjà enregistré » (409). N'importe quel autre e-mail fonctionne.</li>
+</ul>
+<hr />
+<h2 id="cas-1-compte-45-min-inscription-upload-d-avatar">Cas 1 — Compte (45 min) : inscription, upload d'avatar</h2>
+<p><strong>Page :</strong> <code>#/signup</code>, fichier <code>src/account/signup-page.ts</code> (déjà codé).
+<strong>Tests :</strong> <code>tests/1-account/</code></p>
+<p class="context"><strong>Le parcours :</strong> l'utilisateur remplit le formulaire d'inscription. La page le valide, l'envoie au back-end, puis affiche un message de bienvenue et un second formulaire pour envoyer un avatar. La page est déjà écrite ; il lui manque les schémas de validation (A1, A2), la fonction qui les applique (A3) et les types des réponses du back-end (A4). Tant que A3 n'est pas fait, le bouton « Create account » affiche <code>⚠️ Exercise A3 is not done yet</code>.</p>
+<h3 id="a1">A1 — <code>SignupSchema</code> : <code>src/account/account-schema.ts</code></h3>
+<p class="meta"><strong>Notions :</strong> Zod v4 (<code>z.object</code>, <code>.refine</code> inter-champs, <code>z.enum</code>, <code>z.stringbool</code>, <code>z.literal</code> + <code>.transform</code>, <code>.pipe</code>), <code>z.input</code> vs <code>z.output</code>, <code>as const</code><br />
+<strong>Lancer les tests :</strong> <code>npm run ex A1</code></p>
+<p class="context"><strong>Contexte :</strong> la page lit le formulaire avec <code>FormData</code> : toutes les valeurs arrivent sous forme de chaînes, et une case non cochée n'arrive pas du tout. <code>SignupSchema</code> fait le pont entre ces données brutes et les données propres qu'on envoie à l'API. Il vérifie chaque champ et convertit ce qui doit l'être.</p>
+<p class="goal"><strong>Ce que vous allez faire :</strong> compléter le schéma. <code>email</code>, <code>displayName</code> et <code>password</code> sont déjà écrits : inspirez-vous-en. Les messages d'erreur exacts attendus sont dans <code>tests/1-account/A1-signup-schema.spec.ts</code>.</p>
+<p><strong>Étapes :</strong></p>
+<ol>
+<li><strong>Ajoutez le champ <code>confirmPassword</code></strong>, une simple chaîne (<code>z.string()</code>).</li>
+<li><strong>Vérifiez que les deux mots de passe sont identiques.</strong> Cette règle porte sur deux champs à la fois : elle ne peut pas s'écrire sur un champ seul. Ajoutez un <code>.refine(…)</code> <strong>après</strong> le <code>z.object({ … })</code> : il reçoit l'objet entier et renvoie <code>true</code> si tout va bien.
+<ul>
+<li>Deuxième argument : <code>{ error: 'Passwords do not match', path: ['confirmPassword'] }</code>. <code>path</code> indique sous quel champ afficher l'erreur ; sans lui, elle serait rattachée au formulaire entier et n'apparaîtrait sous aucun champ.</li>
+</ul>
+</li>
+<li><strong>Ajoutez <code>country</code></strong>, qui doit être l'un des codes de la liste des pays. <code>z.enum(COUNTRY_CODES, { error: 'Please pick a country' })</code> accepte uniquement ces valeurs.
+<ul>
+<li><code>COUNTRY_CODES</code> est déjà importé. Il est construit à partir de <code>COUNTRIES</code> (<code>src/shared/countries.ts</code>), déclaré avec <code>as const</code> : TypeScript garde les valeurs exactes (<code>'FR'</code>, <code>'BE'</code>…) au lieu de <code>string</code>. Résultat : le type du champ sera <code>'FR' | 'BE' | …</code>, et ajouter un pays dans la liste mettra le type à jour tout seul.</li>
+</ul>
+</li>
+<li><strong>Ajoutez <code>newsletter</code></strong>, une case à cocher facultative. Cochée, elle envoie la chaîne <code>&quot;on&quot;</code> ; décochée, elle n'envoie rien. On veut un vrai booléen. <code>z.stringbool()</code> convertit <code>&quot;on&quot;</code>, <code>&quot;true&quot;</code>, <code>&quot;1&quot;</code>… en <code>true</code> ; ajoutez <code>.default(false)</code> pour le cas où le champ est absent.</li>
+<li><strong>Ajoutez <code>acceptTerms</code></strong>, une case obligatoire. Elle doit valoir <code>&quot;on&quot;</code> (<code>z.literal('on', { error: 'You must accept the terms' })</code>), et l'API attend <code>true</code>. Ajoutez <code>.transform(() =&gt; true as const)</code> pour la convertir.
+<ul>
+<li>Sans <code>as const</code>, TypeScript élargit <code>true</code> en <code>boolean</code>, et le test de type échoue : on veut que le type de sortie dise « toujours <code>true</code> ».</li>
+</ul>
+</li>
+<li><strong>Normalisez l'e-mail :</strong> <code>'  Alice@PXO.fr '</code> doit devenir <code>'alice@pxo.fr'</code>.
+<ul>
+<li>⚠️ Piège : <code>z.email().trim()</code> vérifie le format <strong>avant</strong> de supprimer les espaces, donc rejette <code>'  Alice@PXO.fr '</code>.</li>
+<li>Il faut d'abord nettoyer une chaîne, puis la passer au validateur d'e-mail : <code>z.string().trim().toLowerCase().pipe(z.email(…))</code>. <code>.pipe()</code> enchaîne deux schémas : la sortie du premier devient l'entrée du second.</li>
+</ul>
+</li>
+</ol>
+<p class="check"><strong>Vérifier :</strong> <code>npm run ex A1</code> passe au vert. Le test de type vérifie aussi qu'en <strong>entrée</strong>, <code>newsletter</code> est une <code>string | undefined</code> et qu'en <strong>sortie</strong> c'est un <code>boolean</code> : un même schéma décrit deux types, <code>z.input&lt;…&gt;</code> (ce que le formulaire envoie) et <code>z.output&lt;…&gt;</code> (ce que l'API reçoit).</p>
+<h3 id="a2">A2 — <code>AvatarSchema</code> et <code>UploadSchema</code></h3>
+<p class="meta"><strong>Notions :</strong> Zod v4 (<code>z.file()</code> avec <code>.max</code> et <code>.mime</code>, <code>.optional()</code>)<br />
+<strong>Lancer les tests :</strong> <code>npm run ex A2</code></p>
+<p class="context"><strong>Contexte :</strong> après l'inscription, un second formulaire permet d'envoyer une photo (<code>POST /api/avatar</code>). L'attribut <code>accept=&quot;image/*&quot;</code> du champ fichier n'est qu'une suggestion au navigateur : l'utilisateur peut choisir n'importe quel fichier. On vérifie donc taille et type <strong>avant</strong> l'envoi, pour éviter un upload de 50 Mo refusé à l'arrivée.</p>
+<p class="goal"><strong>Ce que vous allez faire :</strong> compléter les deux schémas, toujours dans <code>src/account/account-schema.ts</code>.</p>
+<p><strong>Étapes :</strong></p>
+<ol>
+<li><strong>Limitez la taille de l'avatar à 2 Mo.</strong> <code>z.file()</code> valide un objet <code>File</code> du navigateur. Ajoutez <code>.max(2 * 1024 * 1024, { error: '2 MB maximum' })</code> : la taille se compte en <strong>octets</strong>.</li>
+<li><strong>N'acceptez que quatre formats d'image.</strong> Ajoutez <code>.mime([...], { error: 'PNG, JPEG, WebP or AVIF only' })</code> avec les types MIME <code>image/png</code>, <code>image/jpeg</code>, <code>image/webp</code> et <code>image/avif</code>. Le type MIME est le format déclaré du fichier (<code>file.type</code>).</li>
+<li><strong>Ajoutez une légende facultative à <code>UploadSchema</code> :</strong> un champ <code>caption</code>, chaîne de 140 caractères au plus (<code>.max(140)</code>), rendu facultatif avec <code>.optional()</code>.</li>
+</ol>
+<p class="check"><strong>Vérifier :</strong> <code>npm run ex A2</code> passe au vert.</p>
+<h3 id="a3">A3 — <code>validateForm</code>, un seul générique pour tous les formulaires : <code>src/shared/form.ts</code></h3>
+<p class="meta"><strong>Notions :</strong> génériques (paramètre contraint <code>S extends z.ZodType</code>, types dérivés du paramètre, 2 paramètres de type), <code>Record</code>, <code>Partial</code>, <code>Extract</code>, <code>keyof</code>, union discriminée<br />
+<strong>Lancer les tests :</strong> <code>npm run ex A3</code></p>
+<p class="context"><strong>Contexte :</strong> les deux formulaires de la page font la même chose : passer les données brutes dans un schéma, puis soit récupérer les données propres, soit afficher un message d'erreur sous chaque champ (<code>showFieldErrors</code>). Ouvrez <code>src/account/login-page.ts</code> : il fait ce travail à la main, en une dizaine de lignes. <code>validateForm</code> le fait une fois pour toutes, pour n'importe quel schéma — à condition que son type de retour suive le schéma qu'on lui passe.</p>
+<p class="goal"><strong>Ce que vous allez faire :</strong> écrire deux types et une fonction générique dans <code>src/shared/form.ts</code>. Aujourd'hui, les trois valent <code>any</code> : <code>validateForm</code> accepte n'importe quel schéma, mais la page ne sait rien de ce qu'elle renvoie.</p>
+<p><strong>Étapes :</strong></p>
+<ol>
+<li><strong>Écrivez le type <code>FieldErrors&lt;T&gt;</code></strong>, qui décrit les erreurs d'un formulaire dont les champs sont décrits par <code>T</code>. Pour chaque champ, il y a au plus un message ; un champ sans erreur est simplement absent.
+<ul>
+<li>Résultat attendu : <code>FieldErrors&lt;{ email: string; age: number }&gt;</code> doit donner <code>{ email?: string; age?: string }</code>.</li>
+<li><code>Record&lt;K, V&gt;</code> construit un type objet dont les clés sont <code>K</code> et les valeurs <code>V</code>. <code>Partial&lt;X&gt;</code> rend toutes les propriétés de <code>X</code> facultatives.</li>
+<li>Pour les clés, <code>keyof T</code> donne les noms des propriétés de <code>T</code>. Mais <code>keyof</code> peut aussi contenir des <code>number</code> et des <code>symbol</code>, alors que les noms de champs d'un formulaire sont des chaînes. <code>Extract&lt;keyof T, string&gt;</code> ne garde que les clés de type <code>string</code>.</li>
+</ul>
+</li>
+<li><strong>Écrivez le type <code>FormResult&lt;In, Out&gt;</code></strong>, le résultat d'une validation. Une validation réussit ou échoue, et on veut que TypeScript sache lequel des deux cas on manipule. On utilise une <strong>union discriminée</strong> : deux formes d'objet qui partagent une propriété dont la valeur les distingue, ici <code>ok</code>.
+<ul>
+<li>Résultat attendu : <code>{ ok: true; data: Out } | { ok: false; errors: FieldErrors&lt;In&gt; }</code>.</li>
+<li>Pourquoi deux paramètres ? Les données validées ont le type de <strong>sortie</strong> du schéma (après conversion : <code>country</code> est un <code>CountryCode</code>, <code>newsletter</code> un <code>boolean</code>). Les erreurs, elles, portent sur les champs du formulaire tel qu'il a été saisi, donc sur le type d'<strong>entrée</strong>.</li>
+<li>Une fois <code>FormResult</code> écrit, un <code>if (result.ok)</code> suffit : à l'intérieur, TypeScript sait que <code>result.data</code> existe ; dans le <code>else</code>, que <code>result.errors</code> existe.</li>
+</ul>
+</li>
+<li><strong>Rendez <code>validateForm</code> générique.</strong> Ajoutez un paramètre de type <code>S</code> qui représente le type du schéma reçu : <code>validateForm&lt;S extends z.ZodType&gt;(schema: S, input: unknown)</code>.
+<ul>
+<li><code>extends z.ZodType</code> est une <strong>contrainte</strong> : <code>S</code> doit être un schéma Zod. C'est ce qui vous autorise à appeler <code>schema.safeParse()</code>.</li>
+<li>Vous n'aurez jamais à écrire <code>S</code> à l'appel : TypeScript le déduit de l'argument. Avec <code>validateForm(SignupSchema, …)</code>, <code>S</code> vaut <code>typeof SignupSchema</code>.</li>
+<li>Déclarez le type de retour <code>FormResult&lt;z.input&lt;S&gt;, z.output&lt;S&gt;&gt;</code>. <code>z.input&lt;S&gt;</code> et <code>z.output&lt;S&gt;</code> extraient d'un schéma ses types d'entrée et de sortie. Un seul paramètre de type, deux types dérivés.</li>
+</ul>
+</li>
+<li><strong>Écrivez le corps de la fonction.</strong>
+<ul>
+<li><code>schema.safeParse(input)</code> ne lève jamais d'exception : il renvoie <code>{ success: true, data }</code> ou <code>{ success: false, error }</code>.</li>
+<li>En cas de succès, renvoyez <code>{ ok: true, data }</code>.</li>
+<li>En cas d'échec, <code>error.issues</code> liste tous les problèmes trouvés. Chaque problème a un <code>path</code> (le chemin du champ, par exemple <code>['email']</code>) et un <code>message</code>. Construisez l'objet <code>errors</code> en gardant <strong>le premier message</strong> de chaque champ (<code>path[0]</code>), puis renvoyez <code>{ ok: false, errors }</code>.</li>
+<li>TypeScript vous demandera un cast au moment d'écrire <code>errors[field]</code> : Zod type les chemins en <code>PropertyKey[]</code>, il ne peut pas savoir que ce sont des champs du formulaire.</li>
+</ul>
+</li>
+</ol>
+<div class="check"><p><strong>Vérifier :</strong></p>
+<ul>
+<li><code>npm run ex A3</code> passe au vert.</li>
+<li>Dans <code>src/account/signup-page.ts</code>, survolez <code>result.data.country</code> : son type est <code>'FR' | 'BE' | …</code>, et non plus <code>any</code>.</li>
+<li>Dans l'app, cliquez sur « Create account » avec un formulaire vide : les messages apparaissent sous chaque champ.</li>
+<li>Si A2 n'est pas fini, <code>npm run typecheck</code> signale <code>result.data.caption</code> dans <code>signup-page.ts</code>. C'est la preuve que le générique fonctionne : la page ne peut plus utiliser un champ que le schéma ne déclare pas.</li>
+</ul></div>
+<h3 id="a4">A4 — Des types dérivés d'un client d'API qu'on ne peut pas modifier : <code>src/account/account-types.ts</code></h3>
+<p class="meta"><strong>Notions :</strong> <code>ReturnType</code>, <code>Awaited</code>, <code>NonNullable</code>, <code>Parameters</code>, accès indexé (<code>T['user']</code>), <code>typeof</code> sur une fonction, <code>import type</code><br />
+<strong>Lancer les tests :</strong> <code>npm run ex A4</code></p>
+<p class="context"><strong>Contexte :</strong> <code>src/account/account-api.ts</code> regroupe les trois fonctions par lesquelles les pages parlent au back-end : <code>login</code>, <code>signup</code> et <code>uploadAvatar</code>. Chacune fait un <code>fetch</code> vers <code>/api/…</code> (servi par le faux back-end de <code>build/plugins.ts</code>) et renvoie la réponse. Par exemple, <code>signup</code> renvoie <code>{ user, token }</code>, ou <code>null</code> si l'e-mail est déjà pris. Dans un vrai projet, ce fichier serait <strong>généré</strong> à partir de la spécification OpenAPI du back-end (avec openapi-typescript, Orval…) : on ne le modifie pas, et il n'exporte aucun type nommé pour ses réponses — ils n'existent qu'en ligne, dans les signatures.</p>
+<p>Or les pages ont besoin de ces types : <code>welcome.ts</code> affiche la session reçue après l'inscription, et <code>signup-page.ts</code> passe des options à <code>uploadAvatar</code>. Les recopier à la main, c'est prendre le risque qu'ils divergent le jour où l'API change. On les <strong>dérive</strong> donc des signatures des fonctions.</p>
+<p class="goal"><strong>Ce que vous allez faire :</strong> remplacer les quatre <code>any</code> de <code>src/account/account-types.ts</code>, en partant uniquement des fonctions. Commencez par ouvrir <code>account-api.ts</code> et lisez la signature de <code>signup</code> : elle renvoie <code>Promise&lt;{ user: …; token: string } | null&gt;</code>.</p>
+<p><strong>Étapes :</strong></p>
+<ol>
+<li><strong><code>SignupResponse</code> : ce que <code>signup()</code> renvoie une fois la promesse résolue.</strong>
+<ul>
+<li><code>typeof signup</code> donne le type de la fonction elle-même. (<code>signup</code> est importé avec <code>import type</code> : on ne s'en sert que pour son type, rien n'est importé à l'exécution.)</li>
+<li><code>ReturnType&lt;F&gt;</code> donne le type de retour d'une fonction : ici <code>Promise&lt;{ … } | null&gt;</code>.</li>
+<li><code>Awaited&lt;P&gt;</code> donne ce qu'une promesse contient une fois résolue.</li>
+<li>Attendu : <code>{ user: …; token: string } | null</code>.</li>
+</ul>
+</li>
+<li><strong><code>Session</code> : une réponse réussie, c'est-à-dire <code>SignupResponse</code> sans le <code>null</code>.</strong> <code>NonNullable&lt;X&gt;</code> retire <code>null</code> et <code>undefined</code> d'un type.</li>
+<li><strong><code>User</code> : la partie <code>user</code> d'une session.</strong> L'accès indexé <code>T['clé']</code> donne le type d'une propriété, comme <code>objet.clé</code> donne sa valeur.</li>
+<li><strong><code>UploadOptions</code> : le second paramètre de <code>uploadAvatar</code>.</strong>
+<ul>
+<li><code>Parameters&lt;F&gt;</code> donne les paramètres d'une fonction sous forme de tuple : <code>[file: File, options?: { … }]</code>. Prenez l'élément d'indice <code>1</code>.</li>
+<li>Ce paramètre est facultatif, donc son type contient <code>undefined</code>. Retirez-le avec <code>NonNullable</code>.</li>
+</ul>
+</li>
+</ol>
+<div class="check"><p><strong>Vérifier :</strong></p>
+<ul>
+<li><code>npm run ex A4</code> passe au vert.</li>
+<li>Lancez <code>npm run typecheck</code> : une erreur apparaît dans <code>src/account/welcome.ts</code>. Ce fichier affiche <code>session.user.name</code>, qui n'existe pas ; tant que <code>Session</code> valait <code>any</code>, TypeScript ne pouvait pas le voir. Inscrivez-vous dans l'app : le message dit « Welcome, ! ». Corrigez <code>welcome.ts</code> avec la bonne propriété, puis réessayez.</li>
+</ul></div>
+<hr />
+<h2 id="cas-2-chat-55-min">Cas 2 — Chat (55 min)</h2>
+<p><strong>Page :</strong> <code>#/chat</code>.
+<strong>Tests :</strong> <code>tests/2-chat/</code>. La page prend vie après C5 et C7.</p>
+<p class="context"><strong>Le parcours :</strong> un chat de support avec « Léa ». Dans une vraie app, le serveur pousserait des événements par WebSocket : un nouveau message, « Léa écrit… », « message lu », une réaction emoji, une notification système. Ici, <code>src/chat/fake-server.ts</code> joue ce rôle. Il envoie des <strong>frames</strong> : des chaînes JSON contenant chacune un lot d'événements, dont deux sont volontairement cassées.</p>
+<p><strong>Déjà codé :</strong></p>
+<ul>
+<li><code>chat-events.ts</code> : l'union discriminée <code>ChatEvent</code>, c'est-à-dire le contrat de tout ce que le serveur peut envoyer. Chaque événement a un <code>type</code> (<code>'message'</code>, <code>'typing'</code>…) et, sauf <code>ping</code>, un <code>payload</code> (son contenu). Les identifiants sont des template literal types : <code>usr_${string}</code> veut dire « une chaîne qui commence par <code>usr_</code> ».</li>
+<li><code>fake-server.ts</code> : le faux serveur.</li>
+<li><code>chat-page.ts</code> : la page. Pour chaque frame reçue, elle la décode (C7), met à jour l'état avec le reducer (C6), prévient les abonnés par le bus (C5), puis réaffiche.</li>
+</ul>
+<p><strong>Avant de commencer, ouvrez <code>src/chat/chat-events.ts</code></strong> et lisez <code>ChatEvent</code> : tous les exercices C1 à C7 en partent.</p>
+<h3 id="c1">C1 — <code>ChatEventType</code>, <code>EventOf&lt;K&gt;</code> : <code>src/chat/chat-types.ts</code></h3>
+<p class="meta"><strong>Notions :</strong> accès indexé sur une union, <code>Extract</code>, générique contraint (<code>K extends ChatEventType</code>)<br />
+<strong>Lancer les tests :</strong> <code>npm run ex C1</code></p>
+<p class="context"><strong>Contexte :</strong> tout le reste du chat a besoin de parler des événements par leur type : « les handlers de <code>typing</code> », « l'événement <code>read</code> ». Plutôt que de réécrire ces types à la main, on les dérive de <code>ChatEvent</code>. Ajoutez un événement au contrat, et tout ce qui en dépend suit.</p>
+<p><strong>Étapes :</strong></p>
+<ol>
+<li><strong>Écrivez <code>ChatEventType</code>, la liste de tous les types d'événements</strong> : <code>'message' | 'typing' | 'read' | 'reaction' | 'system' | 'ping'</code>. Ne la recopiez pas : sur une union d'objets, <code>ChatEvent['type']</code> donne l'union des valeurs de <code>type</code> de tous les membres.</li>
+<li><strong>Écrivez <code>EventOf&lt;K&gt;</code>, qui retrouve l'événement complet à partir de son type.</strong> Par exemple, <code>EventOf&lt;'typing'&gt;</code> doit donner <code>{ type: 'typing'; payload: { author: UserId; isTyping: boolean } }</code>.
+<ul>
+<li><code>Extract&lt;Union, Forme&gt;</code> garde les membres de l'union qui correspondent à la forme donnée. Quelle forme ont les événements dont le <code>type</code> vaut <code>K</code> ?</li>
+<li><code>K extends ChatEventType</code> est déjà écrit : il interdit <code>EventOf&lt;'tpying'&gt;</code>.</li>
+</ul>
+</li>
+</ol>
+<p class="check"><strong>Vérifier :</strong> <code>npm run ex C1</code> passe au vert.</p>
+<h3 id="c2">C2 — <code>PayloadOf&lt;E&gt;</code> et <code>EventWithoutPayload</code></h3>
+<p class="meta"><strong>Notions :</strong> types conditionnels, <code>infer</code>, distributivité, <code>never</code><br />
+<strong>Lancer les tests :</strong> <code>npm run ex C2</code></p>
+<p class="context"><strong>Contexte :</strong> l'état du chat stocke des messages, pas des événements : il a besoin du contenu (<code>payload</code>) d'un événement <code>message</code>. <code>src/chat/chat-reducer.ts</code> définit <code>Message = PayloadOf&lt;EventOf&lt;'message'&gt;&gt;</code>. Certains événements (<code>ping</code>) n'ont pas de contenu.</p>
+<div class="reminder"><p><strong>Rappels :</strong></p>
+<ul>
+<li>Un <strong>type conditionnel</strong> s'écrit <code>A extends B ? Si : Sinon</code> : « si <code>A</code> est compatible avec <code>B</code>, alors <code>Si</code>, sinon <code>Sinon</code> ».</li>
+<li><strong><code>infer</code></strong> s'utilise dans la partie <code>B</code> pour capturer un morceau du type : dans <code>E extends { payload: infer P } ? P : never</code>, TypeScript cherche une propriété <code>payload</code> dans <code>E</code> et nomme <code>P</code> son type.</li>
+<li><strong>Distributivité</strong> : quand on passe une union à un type conditionnel dont le paramètre est « nu » (<code>E extends …</code>, sans rien autour), TypeScript l'applique à chaque membre séparément, puis réunit les résultats. Un résultat <code>never</code> disparaît de l'union.</li>
+</ul></div>
+<p><strong>Étapes :</strong></p>
+<ol>
+<li><strong>Écrivez <code>PayloadOf&lt;E&gt;</code></strong>, qui donne le <code>payload</code> d'un événement, ou <code>never</code> s'il n'en a pas.
+<ul>
+<li><code>PayloadOf&lt;EventOf&lt;'read'&gt;&gt;</code> doit donner <code>{ messageId: MessageId; reader: UserId }</code>.</li>
+<li><code>PayloadOf&lt;EventOf&lt;'ping'&gt;&gt;</code> doit donner <code>never</code>.</li>
+</ul>
+</li>
+<li><strong>Testez la distributivité :</strong> survolez <code>PayloadOf&lt;EventOf&lt;'read' | 'ping'&gt;&gt;</code> dans votre éditeur. Vous obtenez le payload de <code>read</code> seul : celui de <code>ping</code> était <code>never</code> et a disparu.</li>
+<li><strong>Écrivez <code>EventWithoutPayload</code></strong>, les événements qui n'ont pas de <code>payload</code> (aujourd'hui : <code>{ type: 'ping' }</code>). Écrivez un petit type conditionnel qui garde un événement s'il n'a <strong>pas</strong> de <code>payload</code> et renvoie <code>never</code> sinon, puis appliquez-le à <code>ChatEvent</code> : la distributivité fait le reste.
+<ul>
+<li>Question bonus : c'est exactement ainsi que le type natif <code>Exclude</code> est écrit. Pouvez-vous réécrire votre réponse avec <code>Exclude</code> ?</li>
+</ul>
+</li>
+</ol>
+<p class="check"><strong>Vérifier :</strong> <code>npm run ex C2</code> passe au vert.</p>
+<h3 id="c3">C3 — Le bug de <code>Batch&lt;E&gt;</code></h3>
+<p class="meta"><strong>Notions :</strong> types conditionnels, distributivité et comment la désactiver (<code>[E] extends […]</code>)<br />
+<strong>Lancer les tests :</strong> <code>npm run ex C3</code></p>
+<p class="context"><strong>Contexte :</strong> le serveur regroupe plusieurs événements dans une même frame, par exemple « Léa a arrêté d'écrire » + « nouveau message de Léa ». Un lot <strong>mélange</strong> donc les types d'événements. <code>Batch&lt;ChatEvent&gt;</code> est le type de retour du décodeur (C7).</p>
+<p class="goal"><strong>Ce que vous allez faire :</strong> comprendre pourquoi un type qui compile est faux, puis le corriger. Ici, la distributivité de C2 devient un bug.</p>
+<p><strong>Étapes :</strong></p>
+<ol>
+<li><strong>Lancez <code>npm run ex C3</code> et lisez l'erreur</strong> : <code>not assignable to parameter of type 'never'</code>, quand le test ajoute un <code>typing</code> dans un lot qui contient déjà un <code>message</code>.</li>
+<li><strong>Survolez <code>Batch&lt;ChatEvent&gt;</code></strong> dans le test. Vous obtenez <code>MessageEvent[] | TypingEvent[] | …</code> : « soit un tableau de messages, soit un tableau de typing… ». La distributivité a appliqué <code>E[]</code> à chaque membre séparément. Or on voulait <strong>un</strong> tableau qui accepte tous les événements : <code>ChatEvent[]</code>.</li>
+<li><strong>Comprenez l'erreur :</strong> pour ajouter un élément dans <code>A[] | B[]</code>, TypeScript exige qu'il soit à la fois un <code>A</code> et un <code>B</code>, ce qui est impossible : <code>never</code>.</li>
+<li><strong>Désactivez la distribution.</strong> Elle ne s'applique que si le paramètre est « nu ». Entourez les deux côtés de crochets : <code>[E] extends [ChatEvent] ? E[] : never</code>. L'union est alors testée d'un seul bloc.</li>
+</ol>
+<p class="check"><strong>Vérifier :</strong> <code>npm run ex C3</code> passe au vert.</p>
+<h3 id="c4">C4 — <code>OutgoingEvent</code></h3>
+<p class="meta"><strong>Notions :</strong> <code>Exclude</code><br />
+<strong>Lancer les tests :</strong> <code>npm run ex C4</code></p>
+<p class="context"><strong>Contexte :</strong> le client envoie lui aussi des événements : ses messages, « j'écris », « lu », ses réactions. En revanche, <code>system</code> et <code>ping</code> ne viennent que du serveur. <code>OutgoingEvent</code> est le type du paramètre de <code>FakeChatServer.send()</code> : le compilateur empêche alors la page d'envoyer un événement réservé au serveur.</p>
+<p><strong>Étape :</strong> écrivez <code>OutgoingEvent</code>, tous les événements de <code>ChatEvent</code> sauf <code>system</code> et <code>ping</code>. <code>Exclude&lt;Union, Forme&gt;</code> est l'inverse d'<code>Extract</code> (C1) : il <strong>retire</strong> les membres qui correspondent à la forme.</p>
+<p class="check"><strong>Vérifier :</strong> <code>npm run ex C4</code> passe au vert. Puis, dans <code>chat-page.ts</code>, essayez d'écrire <code>server.send({ type: 'ping' })</code> : le compilateur refuse.</p>
+<h3 id="c5">C5 — Bus générique : <code>src/chat/chat-bus.ts</code></h3>
+<p class="meta"><strong>Notions :</strong> génériques (méthode générique, inférence depuis un littéral), narrowing, contravariance des paramètres, champs <code>#privés</code><br />
+<strong>Lancer les tests :</strong> <code>npm run ex C5</code></p>
+<p class="context"><strong>Contexte :</strong> certaines parties de la page doivent réagir à un type d'événement précis. Par exemple, quand un message de Léa arrive, la page renvoie un accusé de lecture ; une notification système de niveau <code>warning</code> part dans la console. Le bus distribue chaque événement aux fonctions abonnées à son type. Ouvrez <code>chat-page.ts</code> et cherchez <code>bus.on(</code> : aujourd'hui, <code>event</code> y vaut <code>any</code>.</p>
+<p class="goal"><strong>Ce que vous allez faire :</strong> rendre <code>on</code> générique, pour que <code>bus.on('typing', (event) =&gt; …)</code> sache que <code>event</code> est un événement <code>typing</code>, puis écrire le fonctionnement du bus.</p>
+<p><strong>Étapes :</strong></p>
+<ol>
+<li><strong>Rendez <code>on</code> générique.</strong> Remplacez sa signature par <code>on&lt;K extends ChatEventType&gt;(type: K, handler: (event: EventOf&lt;K&gt;) =&gt; void): () =&gt; void</code>.
+<ul>
+<li>Quand on appelle <code>bus.on('typing', …)</code>, TypeScript déduit <code>K = 'typing'</code> du premier argument, puis type le handler avec <code>EventOf&lt;'typing'&gt;</code>.</li>
+<li><code>K extends ChatEventType</code> refuse un type inconnu comme <code>'tpying'</code>.</li>
+</ul>
+</li>
+<li><strong>Stockez les abonnements.</strong> Ajoutez un champ privé, par exemple <code>#handlers = new Map&lt;ChatEventType, Set&lt;…&gt;&gt;()</code> : pour chaque type d'événement, l'ensemble des fonctions abonnées.
+<ul>
+<li>Quel type donner aux fonctions dans le <code>Set</code> ? Chacune attend un événement différent. <code>(event: never) =&gt; void</code> accepte toutes les fonctions à un paramètre : une fonction qui accepte un <code>typing</code> peut être rangée comme « fonction qui accepte quelque chose ».</li>
+</ul>
+</li>
+<li><strong>Écrivez <code>on</code></strong> : ajoutez le handler au <code>Set</code> du type demandé (créez le <code>Set</code> s'il n'existe pas encore), et renvoyez une fonction qui le retire. C'est cette fonction que l'appelant utilisera pour se désabonner.</li>
+<li><strong>Écrivez <code>emit(event)</code></strong> : récupérez le <code>Set</code> de <code>event.type</code> et appelez chaque handler avec l'événement, dans l'ordre d'inscription.
+<ul>
+<li>Vous aurez besoin d'un cast ici. Il est sûr : <code>on</code> est le seul moyen de remplir la <code>Map</code>, donc le <code>Set</code> de <code>'typing'</code> ne contient que des handlers de <code>typing</code>. TypeScript ne peut simplement pas suivre ce lien à travers une <code>Map</code>.</li>
+</ul>
+</li>
+</ol>
+<p class="check"><strong>Vérifier :</strong> <code>npm run ex C5</code> passe au vert. Dans <code>chat-page.ts</code>, survolez <code>event</code> dans <code>bus.on('message', (event) =&gt; …)</code> : son type est l'événement <code>message</code>, plus <code>any</code>.</p>
+<h3 id="c6">C6 — Reducer : <code>src/chat/chat-reducer.ts</code></h3>
+<p class="meta"><strong>Notions :</strong> unions discriminées, narrowing par <code>switch</code>, exhaustivité avec <code>never</code>, immutabilité (spread), <code>Partial&lt;Record&lt;…&gt;&gt;</code><br />
+<strong>Lancer les tests :</strong> <code>npm run ex C6</code></p>
+<p class="context"><strong>Contexte :</strong> l'état affiché (messages, qui écrit, qui a lu, réactions, notifications) est recalculé à chaque événement par une fonction pure <code>(état, événement) → nouvel état</code>, puis la page réaffiche tout. Aujourd'hui, seul <code>message</code> est géré : pas d'indicateur « écrit… », pas de ✓✓, pas de réactions.</p>
+<p class="goal"><strong>Ce que vous allez faire :</strong> traiter chaque type d'événement dans le <code>switch</code> de <code>chatReducer</code>, sans jamais modifier l'état reçu, puis demander au compilateur de vérifier qu'aucun cas n'est oublié.</p>
+<p><strong>Étapes :</strong></p>
+<ol>
+<li><strong>Lisez le cas <code>'message'</code>, déjà écrit.</strong> Dans un <code>case 'message'</code>, TypeScript sait que <code>event</code> est un événement <code>message</code> et donne accès à <code>event.payload.text</code>, etc. C'est le <strong>narrowing</strong> d'une union discriminée. Le cas renvoie un <strong>nouvel</strong> objet (<code>{ ...state, messages: [...] }</code>) au lieu de modifier <code>state</code> : la page compare l'ancien et le nouvel état.</li>
+<li><strong>Ajoutez un <code>case</code> pour chaque autre type</strong>, sur le même modèle :
+<ul>
+<li><code>'typing'</code> : ajoutez l'auteur à <code>typing</code> s'il écrit, retirez-le sinon, sans jamais l'ajouter deux fois ;</li>
+<li><code>'read'</code> : ajoutez le lecteur à <code>readBy[messageId]</code>, une seule fois par lecteur ;</li>
+<li><code>'reaction'</code> : ajoutez 1 au compteur de cet emoji pour ce message ;</li>
+<li><code>'system'</code> : ajoutez le texte à <code>notices</code> ;</li>
+<li><code>'ping'</code> : ne change rien, renvoyez <code>state</code>.</li>
+</ul>
+</li>
+<li><strong>Rendez le <code>switch</code> exhaustif.</strong> Remplacez <code>default: return state;</code> par <code>default: return assertNever(event);</code>.
+<ul>
+<li>Si tous les cas sont traités, <code>event</code> vaut <code>never</code> dans le <code>default</code> : il ne reste plus aucun type possible. <code>assertNever</code> n'accepte que <code>never</code>, donc ça compile.</li>
+<li>Si un cas manque, <code>event</code> n'est plus <code>never</code> dans le <code>default</code>, et la compilation échoue en indiquant le type oublié.</li>
+</ul>
+</li>
+</ol>
+<p class="check"><strong>Vérifier :</strong> <code>npm run ex C6</code> passe au vert.</p>
+<div class="try"><p><strong>À essayer :</strong></p>
+<ol>
+<li>Ajoutez un événement <code>{ type: 'delete'; payload: { messageId: MessageId } }</code> à <code>ChatEvent</code>, puis lancez <code>npm run typecheck</code>. Le compilateur liste tous les endroits à mettre à jour : le reducer (<code>never</code>) et le schéma Zod (C7).</li>
+<li>Annulez la modification.</li>
+</ol></div>
+<h3 id="c7">C7 — Valider à la frontière : <code>src/chat/chat-wire.ts</code></h3>
+<p class="meta"><strong>Notions :</strong> Zod v4 (<code>z.discriminatedUnion</code>, <code>z.templateLiteral</code>, <code>z.enum</code>, <code>safeParse</code>, <code>z.prettifyError</code>), <code>unknown</code>, template literal types, validation à l'exécution<br />
+<strong>Lancer les tests :</strong> <code>npm run ex C7</code></p>
+<p class="context"><strong>Contexte :</strong> tout ce qui précède repose sur l'idée que le serveur respecte <code>ChatEvent</code>. Mais les frames arrivent sous forme de texte, et <code>JSON.parse</code> renvoie <code>any</code> : rien ne garantit qu'un serveur d'une autre version, ou buggé, envoie ce qu'on attend. Les types TypeScript n'existent plus à l'exécution. C'est donc ici, à l'entrée, qu'on vérifie vraiment les données.</p>
+<p class="goal"><strong>Ce que vous allez faire :</strong> écrire le schéma Zod de <code>ChatEvent</code>, puis la fonction qui décode une frame.</p>
+<p><strong>Étapes :</strong></p>
+<ol>
+<li><strong>Écrivez <code>ChatEventSchema</code></strong> avec <code>z.discriminatedUnion('type', [ … ])</code> : une liste de <code>z.object(…)</code>, un par événement de <code>ChatEvent</code>. Zod lit d'abord le champ <code>type</code> pour savoir quel objet appliquer, ce qui donne des messages d'erreur précis.
+<ul>
+<li>Pour <code>type</code>, utilisez <code>z.literal('message')</code>, <code>z.literal('typing')</code>…</li>
+<li>Pour les identifiants, <code>z.templateLiteral(['usr_', z.string()])</code> accepte « <code>usr_</code> suivi de n'importe quoi » : c'est l'équivalent Zod de <code>usr_${string}</code>.</li>
+<li>Pour les emojis, <code>z.enum(EMOJIS)</code> (à importer depuis <code>@/chat/chat-events</code>).</li>
+<li>N'oubliez pas <code>ping</code>, qui n'a pas de <code>payload</code>.</li>
+</ul>
+</li>
+<li><strong>Vérifiez que le schéma correspond exactement à <code>ChatEvent</code>.</strong> Le test de type compare <code>z.output&lt;typeof ChatEventSchema&gt;</code> à <code>ChatEvent</code>. Si vous utilisez <code>z.string()</code> pour un identifiant, ou si vous oubliez <code>ping</code>, il échoue : le schéma et le type TypeScript ne peuvent plus diverger.</li>
+<li><strong>Écrivez <code>parseWireFrame(raw)</code>.</strong> Elle ne doit jamais lever d'erreur : une frame cassée ne doit pas casser le chat.
+<ul>
+<li>Appelez <code>JSON.parse(raw)</code> dans un <code>try</code> / <code>catch</code>. Si le JSON est invalide, ou si le résultat n'est pas un tableau (<code>Array.isArray</code>), faites un <code>console.warn</code> et renvoyez <code>[]</code>.</li>
+<li>Pour chaque élément du tableau, appelez <code>ChatEventSchema.safeParse(élément)</code>. Gardez les événements valides ; pour les autres, faites un <code>console.warn</code> (<code>z.prettifyError(result.error)</code> rend l'erreur lisible) et passez au suivant.</li>
+<li>Le type de retour est <code>Batch&lt;ChatEvent&gt;</code> : c'est ici que le correctif de C3 sert.</li>
+</ul>
+</li>
+</ol>
+<p class="check"><strong>Vérifier :</strong> <code>npm run ex C7</code> passe au vert. Ouvrez la console du navigateur sur <code>#/chat</code> : les deux frames cassées du serveur sont écartées, et le chat continue de fonctionner.</p>
+<hr />
+<h2 id="cas-3-videos-40-min">Cas 3 — Vidéos (40 min)</h2>
+<p><strong>Page :</strong> <code>#/media</code>.
+<strong>Tests :</strong> <code>tests/3-media/</code>. Ils tournent dans <code>happy-dom</code>, un DOM implémenté en Node.</p>
+<p class="context"><strong>Le parcours :</strong> une grille de vidéos. Chaque carte montre une affiche ; au survol, un court extrait muet se lance à la place. Un clic ouvre le lecteur, avec ses boutons (lecture, ±5 s, volume) et ses raccourcis clavier, puis les commentaires de la vidéo.</p>
+<p><strong>Déjà codé :</strong></p>
+<ul>
+<li>le tag <code>html</code> (Module B) : <code>html`&lt;p&gt;${texte}&lt;/p&gt;`</code> produit du HTML en échappant les valeurs insérées ;</li>
+<li>les mixins <code>Playable</code>, <code>Seekable</code>, <code>Audible</code> (Module D) ;</li>
+<li>le décorateur <code>@logged</code>, qui écrit chaque appel de méthode dans la console ;</li>
+<li><code>media-page.ts</code>, qui construit la grille, le lecteur et les commentaires.</li>
+</ul>
+<h3 id="m1">M1 — <code>mediaCard()</code> : <code>src/media/media-card.ts</code></h3>
+<p class="meta"><strong>Notions :</strong> templating (tag <code>html</code>, <code>SafeHtml</code>), template literal types (<code>${string}.avif</code>), <code>&lt;picture&gt;</code> / <code>&lt;source&gt;</code><br />
+<strong>Lancer les tests :</strong> <code>npm run ex M1</code></p>
+<p class="context"><strong>Contexte :</strong> <code>media-page.ts</code> appelle <code>mediaCard(media)</code> pour chaque vidéo du catalogue (<code>CATALOG</code>, dans <code>media-types.ts</code>) et insère le HTML obtenu. PXO veut l'affiche en AVIF, plus léger, quand le navigateur le supporte, et en JPEG sinon. La balise <code>&lt;picture&gt;</code> règle ce choix sans aucun JavaScript.</p>
+<p class="goal"><strong>Ce que vous allez faire :</strong> écrire le HTML d'une carte avec le tag <code>html</code>. Le HTML attendu est écrit en commentaire au-dessus de la fonction.</p>
+<p><strong>Étapes :</strong></p>
+<ol>
+<li><strong>Écrivez l'image.</strong> Un <code>&lt;picture&gt;</code> contient une <code>&lt;source type=&quot;image/avif&quot; srcset=&quot;…&quot;&gt;</code> puis un <code>&lt;img src=&quot;…&quot;&gt;</code> JPEG. Le navigateur prend la première <code>&lt;source&gt;</code> dont il sait lire le <code>type</code>, et se rabat sur l'<code>&lt;img&gt;</code> sinon.</li>
+<li><strong>Écrivez l'aperçu vidéo :</strong> un <code>&lt;video class=&quot;preview&quot; muted loop playsinline preload=&quot;none&quot;&gt;</code> avec une <code>&lt;source type=&quot;video/mp4&quot;&gt;</code>. <code>preload=&quot;none&quot;</code> évite de télécharger la vidéo avant le survol.</li>
+<li><strong>Ajoutez la source WebM seulement si elle existe.</strong> <code>preview.webm</code> est facultatif. <code>${preview.webm &amp;&amp; html`…`}</code> n'insère rien quand la valeur est absente : le tag <code>html</code> ignore <code>undefined</code> et <code>false</code>.</li>
+<li><strong>Ajoutez le titre et la durée,</strong> avec <code>formatDuration(media.durationSeconds)</code> (déjà importé).</li>
+<li><strong>Mettez tous les attributs entre guillemets</strong> : <code>alt=&quot;${title}&quot;</code>. Sans guillemets, <code>alt=${title}</code> s'arrête au premier espace du titre. Le tag <code>html</code> échappe les guillemets présents dans la valeur, donc les guillemets autour sont sûrs.</li>
+</ol>
+<p class="check"><strong>Vérifier :</strong> <code>npm run ex M1</code> passe au vert, et la page <code>#/media</code> affiche les trois cartes.</p>
+<p class="try"><strong>Et les types ?</strong> Ouvrez <code>media-types.ts</code> : <code>type AvifUrl = `${string}.avif` </code>. Essayez d'inverser les URL <code>avif</code> et <code>jpeg</code> d'une vidéo de <code>CATALOG</code> : le compilateur refuse.</p>
+<h3 id="m2">M2 — Le mixin <code>Previewable</code> : <code>src/media/player.ts</code></h3>
+<p class="meta"><strong>Notions :</strong> mixins, génériques contraints (<code>Constructor&lt;T&gt;</code> + intersection), champs <code>#privés</code>, décorateur <code>@logged</code> (déjà codé)<br />
+<strong>Lancer les tests :</strong> <code>npm run ex M2</code></p>
+<p class="context"><strong>Contexte :</strong> l'extrait au survol et le grand lecteur utilisent la même classe, <code>VideoPlayer</code>. Elle est construite en empilant des mixins, chacun apportant une capacité : <code>Playable</code> (lecture/pause), <code>Seekable</code> (se déplacer dans la vidéo), <code>Audible</code> (volume). <code>Previewable</code> ajoute l'aperçu au survol, en se servant des méthodes des autres mixins. <code>media-page.ts</code> appelle <code>startPreview()</code> quand la souris entre sur la carte, et <code>stopPreview()</code> quand elle sort.</p>
+<p class="reminder"><strong>Rappel :</strong> un mixin est une fonction qui reçoit une classe et renvoie une sous-classe enrichie. <code>Playable(BasePlayer)</code> renvoie « <code>BasePlayer</code> + <code>play()</code> / <code>pause()</code> ». La ligne <code>class VideoPlayer extends Audible(Previewable(Seekable(Playable(BasePlayer))))</code> empile ainsi quatre capacités.</p>
+<p><strong>Étapes :</strong></p>
+<ol>
+<li><strong>Lisez <code>Playable</code> et <code>Seekable</code></strong> dans le même fichier : ils montrent la forme d'un mixin.</li>
+<li><strong>Déclarez ce dont <code>Previewable</code> a besoin.</strong> Il appellera <code>this.play()</code>, <code>this.pause()</code> et <code>this.seek()</code>, qui n'existent que si <code>Playable</code> et <code>Seekable</code> ont été appliqués avant. Écrivez une interface avec ces trois méthodes, puis changez la contrainte : <code>TBase extends Constructor&lt;BasePlayer &amp; VotreInterface&gt;</code>.
+<ul>
+<li><code>Constructor&lt;T&gt;</code> (déjà écrit dans <code>src/shared/mixins.ts</code>) veut dire « une classe dont les instances sont des <code>T</code> ».</li>
+<li>Résultat : <code>Previewable(BasePlayer)</code> ne compile plus, car <code>BasePlayer</code> ne sait pas jouer.</li>
+</ul>
+</li>
+<li><strong>Écrivez <code>startPreview()</code></strong> : retenez si le son était coupé, coupez-le (<code>this.video.muted = true</code>), allez à 10 % de la durée avec <code>this.seek(…)</code>, puis renvoyez <code>this.play()</code>.
+<ul>
+<li>Mémorisez l'état du son dans un champ privé (<code>#wasMuted</code>) déclaré dans la classe du mixin.</li>
+<li>Passez bien par <code>this.seek()</code> et <code>this.play()</code>, pas par <code>this.video</code> directement : le test vérifie que ces méthodes sont appelées.</li>
+</ul>
+</li>
+<li><strong>Écrivez <code>stopPreview()</code></strong> : mettez en pause, revenez au début (<code>this.seek(0)</code>), puis remettez le son comme il était.</li>
+</ol>
+<p class="check"><strong>Vérifier :</strong> <code>npm run ex M2</code> passe au vert. Survolez une carte dans <code>#/media</code> : l'extrait se lance. Dans la console (niveau Verbose), les lignes de <code>@logged</code> montrent les appels à <code>seek</code> et <code>play</code>.</p>
+<h3 id="m3">M3 — Le décorateur de setter <code>@clamp(min, max)</code> : <code>src/shared/clamp.ts</code></h3>
+<p class="meta"><strong>Notions :</strong> décorateurs standards (setter, <code>ClassSetterDecoratorContext</code>), fabrique de décorateur, générique <code>This</code><br />
+<strong>Lancer les tests :</strong> <code>npm run ex M3</code></p>
+<p class="context"><strong>Contexte :</strong> les boutons 🔉 / 🔊 et les flèches ↑ ↓ appellent <code>changeVolume(±0.1)</code>. Le navigateur n'accepte qu'un volume entre 0 et 1 : au-delà, il lève une erreur. Plutôt que de vérifier la valeur à chaque appel, on la borne une seule fois, sur le setter <code>volume</code> du mixin <code>Audible</code>, avec un décorateur.</p>
+<p class="reminder"><strong>Rappel :</strong> on utilise les décorateurs <strong>standards</strong> (TypeScript 5+, sans <code>experimentalDecorators</code>). Un décorateur de setter est une fonction qui reçoit le setter d'origine et renvoie le setter qui le remplace. <code>clamp(0, 1)</code> est une <strong>fabrique</strong> : elle reçoit les bornes et renvoie le décorateur.</p>
+<p><strong>Étapes :</strong></p>
+<ol>
+<li><strong>Constatez le bug.</strong> Ouvrez une vidéo dans <code>#/media</code> et cliquez sur 🔊 alors que le volume est à 100 % : la console affiche une <code>IndexSizeError</code>, car le setter a reçu 1,1.</li>
+<li><strong>Lisez <code>clamp</code> dans <code>src/shared/clamp.ts</code>.</strong> La signature est écrite ; le décorateur renvoie pour l'instant le setter d'origine sans rien changer.</li>
+<li><strong>Renvoyez un nouveau setter</strong> qui borne la valeur, puis appelle l'original : <code>function (this: This, value: number) { … setter.call(this, valeurBornée) }</code>.
+<ul>
+<li>Utilisez une <code>function</code>, pas une fonction fléchée : une fonction fléchée n'a pas son propre <code>this</code>, et le setter d'origine a besoin de l'instance.</li>
+<li><code>Math.min(max, Math.max(min, value))</code> borne une valeur.</li>
+</ul>
+</li>
+</ol>
+<p class="check"><strong>Vérifier :</strong> <code>npm run ex M3</code> passe au vert, et le bouton 🔊 ne déclenche plus d'erreur.</p>
+<h3 id="m4">M4 (s'il reste du temps) — Raccourcis clavier typés à partir de la classe : <code>src/media/player-remote.ts</code></h3>
+<p class="meta"><strong>Notions :</strong> mapped types, types conditionnels, <code>infer</code>, <code>keyof</code>, tuples variadiques (<code>[C, ...Args]</code>), <code>satisfies</code>, <code>Parameters</code><br />
+<strong>Lancer les tests :</strong> <code>npm run ex M4</code></p>
+<p class="context"><strong>Contexte :</strong> <code>SHORTCUTS</code> associe une touche à une commande du lecteur et à ses arguments : <code>ArrowRight → ['skip', 5]</code>. Aujourd'hui, c'est typé <code>any</code> : une faute de frappe (<code>'skp'</code>) ou un argument du mauvais type ne se voient qu'au moment où l'on appuie sur la touche. On veut que la liste des commandes et de leurs arguments soit <strong>dérivée</strong> de la classe <code>VideoPlayer</code>.</p>
+<p><strong>Étapes :</strong></p>
+<ol>
+<li><strong>Écrivez <code>MethodKeys&lt;T&gt;</code>, les noms des méthodes de <code>T</code></strong> (pas ses propriétés, pas ses getters). Pour une classe avec <code>count</code>, <code>get double()</code>, <code>increment()</code> et <code>reset()</code>, le résultat doit être <code>'increment' | 'reset'</code>. En trois temps :
+<ul>
+<li>un <strong>mapped type</strong> <code>{ [K in keyof T]: … }</code> parcourt chaque propriété de <code>T</code> ;</li>
+<li>pour chacune, un type conditionnel renvoie <code>K</code> si <code>T[K]</code> est une fonction (<code>T[K] extends (...args: never[]) =&gt; unknown</code>), <code>never</code> sinon ;</li>
+<li>enfin, <code>{ … }[keyof T]</code> réunit toutes les valeurs obtenues : les <code>never</code> disparaissent, il reste les noms de méthodes.</li>
+</ul>
+</li>
+<li><strong>Écrivez <code>ArgsOf&lt;T, K&gt;</code>, les paramètres de la méthode <code>K</code>.</strong> <code>ArgsOf&lt;VideoPlayer, 'seek'&gt;</code> doit donner <code>[seconds: number]</code>.
+<ul>
+<li>Essayez d'abord <code>Parameters&lt;T[K]&gt;</code> : ça ne compile pas, car <code>Parameters</code> exige une fonction et TypeScript ne peut pas prouver que <code>T[K]</code> en est une.</li>
+<li>Écrivez donc le type conditionnel vous-même, avec <code>infer</code> : si <code>T[K]</code> est une fonction, capturez ses paramètres.</li>
+</ul>
+</li>
+<li><strong>Écrivez <code>Shortcut</code>, une commande suivie de ses arguments.</strong> <code>['skip', 5]</code> est accepté, <code>['skip', '5']</code> et <code>['seek']</code> sont refusés.
+<ul>
+<li>Construisez un objet type qui associe à chaque commande <code>C</code> le tuple <code>[C, ...ArgsOf&lt;VideoPlayer, C&gt;]</code>, puis indexez-le par <code>PlayerCommand</code> pour obtenir l'union de tous les tuples.</li>
+</ul>
+</li>
+<li><strong>Constatez le résultat :</strong> <code>SHORTCUTS</code> est vérifié par <code>satisfies Record&lt;string, Shortcut&gt;</code>. Remplacez <code>['skip', 5]</code> par <code>['skip', '5']</code> : le compilateur refuse.</li>
+</ol>
+<p class="check"><strong>Vérifier :</strong> <code>npm run ex M4</code> passe au vert.</p>
+<h3 id="m5">M5 (optionnel) — Playwright : <code>tests/e2e/M5-media.e2e.ts</code></h3>
+<p class="meta"><strong>Notions :</strong> Playwright (<code>hover</code>, <code>locator.evaluate</code>, <code>expect.poll</code>)<br />
+<strong>Lancer les tests :</strong> <code>npm run ex M5</code></p>
+<p class="context"><strong>Contexte :</strong> les tests de M1 vérifient le HTML produit, mais <code>happy-dom</code> ne décode ni images ni vidéos. Seul un vrai navigateur peut confirmer qu'il a choisi l'AVIF et que l'extrait joue.</p>
+<p><strong>Étapes :</strong></p>
+<ol>
+<li><strong>Vérifiez que le navigateur choisit l'AVIF.</strong> <code>img.currentSrc</code> contient l'URL réellement retenue par le navigateur. Lisez-la avec <code>locator.evaluate((img: HTMLImageElement) =&gt; img.currentSrc)</code>, dans un <code>expect.poll(…)</code> : l'image n'est peut-être pas encore chargée, <code>expect.poll</code> réessaie jusqu'à ce que la condition soit vraie.</li>
+<li><strong>Vérifiez l'aperçu au survol.</strong> Survolez la première carte (<code>locator.hover()</code>), puis vérifiez que la vidéo <code>video.preview</code> joue (<code>!paused</code>) sans le son (<code>muted</code>). Éloignez la souris (<code>page.mouse.move(0, 0)</code>) et vérifiez qu'elle est en pause et revenue au début (<code>currentTime === 0</code>).</li>
+</ol>
+<p class="check"><strong>Vérifier :</strong> <code>npm run ex M5</code> affiche 2 tests verts.</p>
+<hr />
+<h2 id="bonus">Bonus</h2>
+<h3 id="b1">B1 — Recherche de pays : <code>src/shared/search.ts</code></h3>
+<p class="meta"><strong>Notions :</strong> génériques à 2 paramètres (<code>K extends KeysMatching&lt;T, string&gt;</code>), mapped types, types conditionnels, <code>never</code><br />
+<strong>Lancer les tests :</strong> <code>npm run ex B1</code></p>
+<p class="context"><strong>Contexte :</strong> le formulaire d'inscription a un champ « Search a country » qui filtre la liste des pays. Il appelle <code>searchBy(COUNTRIES, 'name', saisie)</code>. Tant que l'exercice n'est pas fait, la liste n'est pas filtrée.</p>
+<p><strong>Étapes :</strong></p>
+<ol>
+<li><strong>Écrivez <code>KeysMatching&lt;T, V&gt;</code>, les clés de <code>T</code> dont la valeur est de type <code>V</code>.</strong> <code>KeysMatching&lt;{ id: number; name: string }, string&gt;</code> doit donner <code>'name'</code>. Même technique que <code>MethodKeys</code> en M4 : mapped type, conditionnel, puis <code>[keyof T]</code>. Ajoutez <code>-?</code> après la clé (<code>[K in keyof T]-?</code>) pour que les propriétés facultatives n'ajoutent pas <code>undefined</code> au résultat.</li>
+<li><strong>Rendez <code>searchBy</code> générique</strong> avec deux paramètres : <code>T</code> pour le type des éléments, <code>K extends KeysMatching&lt;T, string&gt;</code> pour la clé. <code>searchBy(users, 'age', '42')</code> doit être refusé si <code>age</code> est un nombre.</li>
+<li><strong>Écrivez le corps :</strong> gardez les éléments dont la propriété <code>key</code>, passée dans <code>normalize()</code> (déjà écrite : minuscules, sans accents), contient la recherche normalisée.</li>
+</ol>
+<p class="check"><strong>Vérifier :</strong> <code>npm run ex B1</code> passe au vert, et la recherche « suis » ne laisse que la Suisse dans le formulaire.</p>
+<h3 id="b2">B2 — Offres premium : <code>src/premium/offers.ts</code></h3>
+<p class="meta"><strong>Notions :</strong> <code>Exclude</code>, unions discriminées, exhaustivité avec <code>never</code>, <code>as const satisfies</code><br />
+<strong>Lancer les tests :</strong> <code>npm run ex B2</code></p>
+<p class="context"><strong>Contexte :</strong> la page <code>#/premium</code> affiche les formules (gratuite, mensuelle, annuelle, à vie) et le coût mensuel de celle qu'on choisit. <code>Offer</code> est une union discriminée sur <code>kind</code>.</p>
+<p><strong>Étapes :</strong></p>
+<ol>
+<li><strong>Écrivez <code>PaidOffer</code></strong>, toutes les offres sauf la gratuite, avec <code>Exclude</code>.</li>
+<li><strong>Écrivez <code>monthlyCost(offer)</code></strong>, le coût par mois d'une offre payante : le prix mensuel, le prix annuel divisé par 12, ou le prix à vie divisé par 36. Utilisez un <code>switch</code> sur <code>offer.kind</code>, et rendez-le exhaustif comme en C6.</li>
+<li><strong>Écrivez <code>priceLabel(offer)</code></strong> avec les libellés donnés en commentaire, en formatant les prix avec <code>formatPrice</code> (déjà importé).</li>
+</ol>
+<p class="check"><strong>Vérifier :</strong> <code>npm run ex B2</code> passe au vert, et la page <code>#/premium</code> affiche les prix.</p>
+<h3 id="b3">B3 — Commentaires en fil de discussion : <code>src/comments/comments.ts</code></h3>
+<p class="meta"><strong>Notions :</strong> types récursifs, schéma Zod récursif (getter), génériques F-bounded, <code>z.templateLiteral</code><br />
+<strong>Lancer les tests :</strong> <code>npm run ex B3</code></p>
+<p class="context"><strong>Contexte :</strong> les commentaires, affichés sous le lecteur, sont en fil de discussion : chaque commentaire peut avoir des réponses, qui ont elles-mêmes des réponses. <code>CommentNode</code> est un type <strong>récursif</strong> : il se contient lui-même (<code>replies: CommentNode[]</code>).</p>
+<p><strong>Étapes :</strong></p>
+<ol>
+<li><strong>Écrivez <code>CommentSchema</code></strong>, le schéma Zod de <code>CommentNode</code> (le texte doit faire au moins 1 caractère). Un schéma ne peut pas se citer lui-même pendant qu'on l'écrit… sauf dans un getter, lu plus tard : <code>get replies() { return z.array(CommentSchema); }</code>.</li>
+<li><strong>Rendez <code>countNodes</code> et <code>flattenTree</code> génériques</strong>, pour qu'elles marchent sur n'importe quel arbre dont les nœuds ont des <code>replies</code> du même type : commentaires, menus, dossiers…
+<ul>
+<li>Contrainte : <code>T extends { replies: readonly T[] }</code>. <code>T</code> apparaît dans sa propre contrainte : « un nœud dont les réponses sont des nœuds du même type ».</li>
+<li><code>countNodes</code> compte tous les nœuds, à toutes les profondeurs.</li>
+<li><code>flattenTree</code> renvoie la liste des nœuds en profondeur d'abord (un parent, puis ses réponses), chacun avec sa profondeur (<code>depth</code>, 0 pour le premier niveau).</li>
+</ul>
+</li>
+</ol>
+<p class="check"><strong>Vérifier :</strong> <code>npm run ex B3</code> passe au vert. Ouvrez la première vidéo : ses 5 commentaires s'affichent en fil. Le fil de la deuxième vidéo contient une réponse vide, invalide : la page le signale.</p>
+<hr />
+<p>Formateur : voir <a href="formateur-README.md"><code>formateur-README.md</code></a> (déroulé minuté, réponses, pièges, mode solution).</p>
+
+</main>
+</div>
+<script>
+// Sommaire : replié sur mobile (se referme après un clic), et section courante surlignée.
+const toc = document.getElementById('toc');
+const narrow = matchMedia('(max-width: 860px)');
+const syncToc = () => { toc.open = !narrow.matches; };
+syncToc();
+narrow.addEventListener('change', syncToc);
+toc.addEventListener('click', (e) => { if (narrow.matches && e.target.closest('a')) toc.open = false; });
+const links = new Map([...toc.querySelectorAll('a')].map((a) => [a.getAttribute('href').slice(1), a]));
+const observer = new IntersectionObserver((entries) => {
+  for (const entry of entries) {
+    if (!entry.isIntersecting) continue;
+    links.forEach((a) => a.classList.remove('active'));
+    links.get(entry.target.id)?.classList.add('active');
+  }
+}, { rootMargin: '0px 0px -75% 0px' });
+document.querySelectorAll('main h2[id], main h3[id]').forEach((h) => observer.observe(h));
+</script>
+</body>
+</html>

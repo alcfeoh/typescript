@@ -1,4 +1,4 @@
-// Pre-coded — the sign-up page (Case 1). It uses what you write in A1–A4 and B1.
+// Déjà codé — la page d'inscription (Cas 1). Elle utilise ce que vous écrivez en A1–A4 et B1.
 import { ApiError, signup, uploadAvatar } from '@/account/account-api';
 import { SignupSchema, UploadSchema } from '@/account/account-schema';
 import type { UploadOptions } from '@/account/account-types';
@@ -15,7 +15,7 @@ function countryOptions(query: string) {
   try {
     if (query) countries = searchBy(COUNTRIES, 'name', query);
   } catch (error) {
-    if (!(error instanceof TodoError)) throw error; // B1 not done: no filtering
+    if (!(error instanceof TodoError)) throw error; // B1 pas encore fait : pas de filtrage
   }
   return countries.map((c) => html`<option value="${c.code}">${flagEmoji(c.code)} ${c.name}</option>`);
 }
@@ -99,7 +99,7 @@ function mountAvatarForm(root: HTMLElement): void {
     event.preventDefault();
     alert.textContent = '';
     const raw = formDataToObject(form);
-    // An empty <input type=file> still sends a File, of size 0 and without a name.
+    // Un <input type=file> vide envoie quand même un File, de taille 0 et sans nom.
     if (raw.avatar instanceof File && raw.avatar.size === 0) delete raw.avatar;
     if (raw.caption === '') delete raw.caption;
 

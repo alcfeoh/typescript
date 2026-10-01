@@ -1,12 +1,12 @@
 /**
- * C1 — ChatEventType & EventOf — type-level test: checked by tsc, never executed.
- * Run: npm run ex C1
+ * C1 — ChatEventType et EventOf — tests de types : vérifiés par tsc, jamais exécutés.
+ * Lancer : npm run ex C1
  */
 import { describe, expectTypeOf, it } from 'vitest';
 import type { ChatEvent, UserId } from '@/chat/chat-events';
 import type { ChatEventType, EventOf } from '@/chat/chat-types';
 
-// Built with the built-in Extract, so that C3 does not depend on your answer to C1.
+// Construits avec le Extract natif, pour que ce test ne dépende pas de votre réponse à C1.
 declare const message: Extract<ChatEvent, { type: 'message' }>;
 
 declare const typing: Extract<ChatEvent, { type: 'typing' }>;

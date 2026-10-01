@@ -1,4 +1,4 @@
-// Pre-coded formatting helpers.
+// Déjà codé — utilitaires de formatage.
 
 /** 75 → "1:15", 3725 → "1:02:05" */
 export function formatDuration(totalSeconds: number): string {

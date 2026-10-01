@@ -1,10 +1,10 @@
-// Pre-coded — renders the comments of a video (bonus B3).
+// Déjà codé — affiche les commentaires d'une vidéo (bonus B3).
 import { countNodes, flattenTree, ThreadSchema } from '@/comments/comments';
 import type { MediaId } from '@/media/media-types';
 import { html, type SafeHtml } from '@/shared/html';
 import { TodoError } from '@/shared/todo';
 
-/** What the API sends: unknown until parsed. One thread has a reply without text — invalid. */
+/** Ce que l'API envoie : unknown tant que ce n'est pas validé. Un fil contient une réponse sans texte — invalide. */
 const RAW_THREADS: Record<MediaId, unknown> = {
   vid_generics: [
     {

@@ -1,11 +1,11 @@
-// Pre-coded — Module B (templating without a framework).
+// Déjà codé — Module B (templating sans framework).
 //
-// `html` is a tagged template: every interpolated value is HTML-escaped,
-// unless it is already SafeHtml (the result of another `html` call).
-// That is what makes nested templates composable without double escaping, and XSS-safe.
+// `html` est un tagged template : chaque valeur insérée est échappée pour le HTML,
+// sauf si c'est déjà un SafeHtml (le résultat d'un autre appel à `html`).
+// C'est ce qui permet d'imbriquer les templates sans double échappement, et sans risque XSS.
 
 export class SafeHtml {
-  // A private field makes the class nominal: a plain `{ markup: string }` is not a SafeHtml.
+  // Un champ privé rend la classe nominale : un simple `{ markup: string }` n'est pas un SafeHtml.
   readonly #brand = true;
   constructor(readonly markup: string) {}
   toString(): string {

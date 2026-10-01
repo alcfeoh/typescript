@@ -3,7 +3,7 @@ import * as z from 'zod';
 import { EMOJIS, type ChatEvent } from '@/chat/chat-events';
 import type { Batch } from '@/chat/chat-types';
 
-// z.templateLiteral is the runtime twin of a template literal type: its output is `usr_${string}`.
+// z.templateLiteral est le jumeau, à l'exécution, d'un template literal type : sa sortie est `usr_${string}`.
 const UserIdSchema = z.templateLiteral(['usr_', z.string()]);
 const MessageIdSchema = z.templateLiteral(['msg_', z.string()]);
 

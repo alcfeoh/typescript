@@ -1,15 +1,15 @@
 {
-  // Solution configuration: `@/x` → solutions/x if it exists, otherwise src/x.
-  // `npm run typecheck:solution` and `npm run test:solution` use it.
+  // Configuration du mode solution : `@/x` → solutions/x s'il existe, sinon src/x.
+  // `npm run typecheck:solution` et `npm run test:solution` l'utilisent.
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "paths": {
       "@/*": ["./*", "../src/*"]
     }
   },
-  // src/ is NOT listed: its files are reached through imports, so a starter file that a
-  // solution replaces is never type-checked in solution mode. main.ts pulls in every page.
+  // src/ n'est PAS listé : ses fichiers sont atteints par les imports, donc un fichier de départ
+  // remplacé par une solution n'est jamais vérifié en mode solution. main.ts importe toutes les pages.
   "include": ["../src/main.ts", "../tests", "."],
-  // The starter versions of the tests below are replaced by their solution counterparts.
+  // Les versions de départ des tests ci-dessous sont remplacées par leur solution.
   "exclude": ["../tests/0-tests/typing-indicator.spec.ts", "../tests/e2e"]
 }

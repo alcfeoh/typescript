@@ -1,6 +1,6 @@
 /**
- * A4 — types derived from account-api.ts — type-level test: checked by tsc, never executed.
- * Run: npm run ex A4
+ * A4 — types dérivés d'account-api.ts — tests de types : vérifiés par tsc, jamais exécutés.
+ * Lancer : npm run ex A4
  */
 import { describe, expectTypeOf, it } from 'vitest';
 import type { Session, SignupResponse, UploadOptions, User } from '@/account/account-types';

@@ -2,8 +2,8 @@ import { join } from 'node:path';
 import { defineConfig, devices } from '@playwright/test';
 import { isSolution, overriddenTests, root } from './build/overrides.ts';
 
-// Starter mode: tests/e2e/*.e2e.ts against the starter app (port 5173).
-// Solution mode (`npm run e2e:solution`): solution specs against the solution app (port 5174).
+// Mode de départ : tests/e2e/*.e2e.ts sur l'app de départ (port 5173).
+// Mode solution (`npm run e2e:solution`) : les tests de la solution sur l'app terminée (port 5174).
 const port = isSolution ? 5174 : 5173;
 
 export default defineConfig({

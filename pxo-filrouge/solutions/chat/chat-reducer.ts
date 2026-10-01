@@ -48,8 +48,8 @@ export function chatReducer(state: ChatState, event: ChatEvent): ChatState {
       return state;
 
     default:
-      // Every case is handled, so `event` is `never` here. Add a member to ChatEvent
-      // and forget its case: this line stops compiling.
+      // Tous les cas sont traités, donc `event` vaut `never` ici. Ajoutez un membre à ChatEvent
+      // en oubliant son case : cette ligne ne compile plus.
       return assertNever(event);
   }
 }

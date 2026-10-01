@@ -1,13 +1,13 @@
-// Pre-coded — Module D (TC39 standard decorators, TypeScript 5+; no `experimentalDecorators`).
+// Déjà codé — Module D (décorateurs standards TC39, TypeScript 5+ ; sans `experimentalDecorators`).
 
-/** Where @logged writes. Tests replace it with a spy. */
+/** Là où @logged écrit. Les tests le remplacent par un espion. */
 export const logger = {
   log: (message: string): void => console.debug(message),
 };
 
 /**
- * Method decorator: logs "<Class>.<method>(<args>)" on every call.
- * The generics keep the decorated method's exact signature (This, Args, Return).
+ * Décorateur de méthode : écrit "<Classe>.<méthode>(<arguments>)" à chaque appel.
+ * Les génériques conservent la signature exacte de la méthode décorée (This, Args, Return).
  */
 export function logged<This, Args extends unknown[], Return>(
   method: (this: This, ...args: Args) => Return,

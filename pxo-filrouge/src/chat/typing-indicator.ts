@@ -1,7 +1,7 @@
-// Pre-coded — used by the chat composer. T1 asks you to test it.
+// Déjà codé — utilisé par la zone de saisie du chat. T1 vous demande de le tester.
 //
-// Calls onChange(true) on the first keystroke, then onChange(false) once the user
-// has not typed anything for `idleDelayMs`. stop() ends it immediately (message sent).
+// Appelle onChange(true) à la première frappe, puis onChange(false) dès que l'utilisateur
+// n'a rien tapé pendant `idleDelayMs`. stop() l'arrête immédiatement (message envoyé).
 
 export interface TypingIndicator {
   keystroke(): void;
@@ -9,8 +9,8 @@ export interface TypingIndicator {
 }
 
 export function createTypingIndicator(onChange: (isTyping: boolean) => void, idleDelayMs = 2000): TypingIndicator {
-  // setTimeout returns a number in browsers and a Timeout object in Node:
-  // ReturnType<typeof setTimeout> is right in both.
+  // setTimeout renvoie un nombre dans le navigateur et un objet Timeout dans Node :
+  // ReturnType<typeof setTimeout> est juste dans les deux cas.
   let timer: ReturnType<typeof setTimeout> | undefined;
   let typing = false;
 

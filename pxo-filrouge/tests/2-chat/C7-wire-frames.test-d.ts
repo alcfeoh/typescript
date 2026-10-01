@@ -1,6 +1,6 @@
 /**
- * C7 — the Zod schema and the TypeScript union agree — type-level test: checked by tsc, never executed.
- * Run: npm run ex C7
+ * C7 — le schéma Zod et l'union TypeScript concordent — tests de types : vérifiés par tsc, jamais exécutés.
+ * Lancer : npm run ex C7
  */
 import { describe, expectTypeOf, it } from 'vitest';
 import type * as z from 'zod';

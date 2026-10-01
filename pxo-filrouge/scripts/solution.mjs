@@ -1,7 +1,7 @@
-// Runs any command with PXO_SOLUTION=1, on macOS, Linux and Windows alike.
+// Lance n'importe quelle commande avec PXO_SOLUTION=1, sous macOS, Linux et Windows.
 //   node scripts/solution.mjs vitest run
-// In solution mode, every `@/…` import resolves to solutions/… first, then src/…
-// (see vite.config.ts and playwright.config.ts).
+// En mode solution, chaque import `@/…` cherche d'abord dans solutions/…, puis dans src/…
+// (voir vite.config.ts et playwright.config.ts).
 import { spawn } from 'node:child_process';
 
 const [command, ...args] = process.argv.slice(2);

@@ -14,7 +14,7 @@ export const CommentSchema = z.object({
   id: z.templateLiteral(['cmt_', z.string()]),
   author: z.string(),
   text: z.string().min(1),
-  // The getter delays the reference: CommentSchema exists by the time Zod reads `replies`.
+  // Le getter retarde la référence : CommentSchema existe déjà quand Zod lit `replies`.
   get replies() {
     return z.array(CommentSchema);
   },
@@ -22,8 +22,8 @@ export const CommentSchema = z.object({
 
 export const ThreadSchema = z.array(CommentSchema);
 
-// "F-bounded" constraint: T appears in its own bound. Any node type whose replies are
-// nodes of the same type qualifies, and the functions keep that exact type.
+// Contrainte « F-bounded » : T apparaît dans sa propre contrainte. Tout type de nœud dont les réponses
+// sont des nœuds du même type convient, et les fonctions conservent ce type exact.
 type TreeNode<T> = { replies: readonly T[] };
 
 export function countNodes<T extends TreeNode<T>>(nodes: readonly T[]): number {

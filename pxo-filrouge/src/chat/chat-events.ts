@@ -1,7 +1,7 @@
-// Pre-coded — every event the chat server can push, as a discriminated union.
-// The discriminant is `type`: checking it narrows the whole event, payload included.
+// Déjà codé — tous les événements que le serveur de chat peut envoyer, sous forme d'union discriminée.
+// Le discriminant est `type` : le tester affine tout l'événement, payload compris.
 
-/** Template literal types: an id is not "any string", it is "usr_" followed by anything. */
+/** Template literal types : un identifiant n'est pas « n'importe quelle chaîne », mais « usr_ » suivi de n'importe quoi. */
 export type UserId = `usr_${string}`;
 export type MessageId = `msg_${string}`;
 

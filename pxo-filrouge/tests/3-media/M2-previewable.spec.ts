@@ -1,12 +1,12 @@
 /**
- * M2 — Previewable — runtime test.
- * Run: npm run ex M2
+ * M2 — Previewable — tests d'exécution.
+ * Lancer : npm run ex M2
  */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { VideoPlayer, type VideoLike } from '@/media/player';
 import { logger } from '@/shared/decorators';
 
-/** A fake <video>: plain object, spies on play/pause. */
+/** Une fausse <video> : un objet simple, avec des espions sur play et pause. */
 function fakeVideo(overrides: Partial<VideoLike> = {}): VideoLike {
   const video: VideoLike = {
     currentTime: 0,

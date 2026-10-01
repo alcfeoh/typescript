@@ -1,4 +1,4 @@
-// Solution — A4 payoff: once Session is typed, tsc reports `session.user.name` (it does not exist).
+// Solution — ce qu'apporte A4 : une fois Session typé, tsc signale `session.user.name` (qui n'existe pas).
 import type { Session } from '@/account/account-types';
 import { html, type SafeHtml } from '@/shared/html';
 

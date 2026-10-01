@@ -1,11 +1,11 @@
 /**
- * M3 — @clamp(0, 1) on the volume setter — runtime test.
- * Run: npm run ex M3
+ * M3 — @clamp(0, 1) sur le setter du volume — tests d'exécution.
+ * Lancer : npm run ex M3
  */
 import { describe, expect, it, vi } from 'vitest';
 import { VideoPlayer, type VideoLike } from '@/media/player';
 
-/** A fake <video>: plain object, spies on play/pause. */
+/** Une fausse <video> : un objet simple, avec des espions sur play et pause. */
 function fakeVideo(overrides: Partial<VideoLike> = {}): VideoLike {
   const video: VideoLike = {
     currentTime: 0,

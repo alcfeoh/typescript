@@ -1,4 +1,4 @@
-// Pre-coded — the video page (Case 3): a grid of cards, the player, and its comments (bonus B3).
+// Déjà codé — la page des vidéos (Cas 3) : une grille de cartes, le lecteur et ses commentaires (bonus B3).
 import { commentsView } from '@/comments/comments-view';
 import { mediaCard } from '@/media/media-card';
 import { CATALOG, type Media } from '@/media/media-types';
@@ -18,12 +18,12 @@ function attempt<T>(step: () => T, fallback: (error: TodoError) => T): T {
 }
 
 function attachHoverPreview(card: HTMLElement): void {
-  // querySelector('video') would infer HTMLVideoElement by itself; with a class in the selector,
-  // TypeScript only knows it is an Element — hence the explicit type argument.
+  // querySelector('video') devinerait HTMLVideoElement tout seul ; avec une classe dans le sélecteur,
+  // TypeScript sait seulement que c'est un Element — d'où l'argument de type explicite.
   const preview = new VideoPlayer($<HTMLVideoElement>('video.preview', card));
   card.addEventListener('mouseenter', () => {
     attempt(
-      // play() rejects when the mouse leaves before the clip starts: not an error for a preview.
+      // play() échoue si la souris sort avant le début de l'extrait : ce n'est pas une erreur pour un aperçu.
       () => void preview.startPreview().catch(() => {}),
       (error) => console.info(error.message),
     );

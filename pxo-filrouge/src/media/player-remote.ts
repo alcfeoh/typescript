@@ -1,22 +1,22 @@
-// M4 (if time allows) — Keyboard shortcuts, typed from the VideoPlayer class itself.
-// Add a method to the player: it becomes a command. Change a signature: the shortcuts are re-checked.
+// M4 (s'il reste du temps) — Raccourcis clavier, typés à partir de la classe VideoPlayer elle-même.
+// Ajoutez une méthode au lecteur : elle devient une commande. Changez une signature : les raccourcis sont revérifiés.
 import type { VideoPlayer } from '@/media/player';
 
-/** The names of T's METHODS (not its fields, not its getters). */
+/** Les noms des MÉTHODES de T (ni ses propriétés, ni ses getters). */
 export type MethodKeys<T> = any; // TODO M4
 
 /**
- * The parameters of the method K of T.
- * Parameters<T[K]> does not compile here: TypeScript cannot prove that T[K] is a function.
- * Use a conditional type with `infer` instead.
+ * Les paramètres de la méthode K de T.
+ * Parameters<T[K]> ne compile pas ici : TypeScript ne peut pas prouver que T[K] est une fonction.
+ * Utilisez plutôt un type conditionnel avec `infer`.
  */
 export type ArgsOf<T, K extends keyof T> = any; // TODO M4
 
 export type PlayerCommand = MethodKeys<VideoPlayer>;
 
 /**
- * A command and ITS arguments, as a tuple:  ['skip', 10] ✅   ['skip', '10'] ❌   ['seek'] ❌
- * Hint: build an object type { [C in PlayerCommand]: [C, ...ArgsOf<VideoPlayer, C>] }, then index it.
+ * Une commande suivie de SES arguments, sous forme de tuple :  ['skip', 10] ✅   ['skip', '10'] ❌   ['seek'] ❌
+ * Indice : construisez un type objet { [C in PlayerCommand]: [C, ...ArgsOf<VideoPlayer, C>] }, puis indexez-le.
  */
 export type Shortcut = any; // TODO M4
 
@@ -31,11 +31,11 @@ export const SHORTCUTS = {
   '0': ['seek', 0],
 } satisfies Record<string, Shortcut>;
 
-/** Pre-coded. Returns false when the key is not a shortcut. */
+/** Déjà codé. Renvoie false si la touche n'est pas un raccourci. */
 export function runShortcut(player: VideoPlayer, key: string): boolean {
   if (!Object.hasOwn(SHORTCUTS, key)) return false;
   const [command, ...args]: Shortcut = SHORTCUTS[key as keyof typeof SHORTCUTS];
-  // The one cast: TS cannot correlate `command` with `args` once the tuple is destructured.
+  // Le seul cast : TS ne peut pas relier `command` à `args` une fois le tuple déstructuré.
   const method = player[command as keyof VideoPlayer] as (...args: unknown[]) => unknown;
   method.apply(player, args);
   return true;

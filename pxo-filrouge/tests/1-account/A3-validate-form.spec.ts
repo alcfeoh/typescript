@@ -1,19 +1,19 @@
 /**
- * A3 — validateForm — runtime test.
- * Run: npm run ex A3
+ * A3 — validateForm — tests d'exécution.
+ * Lancer : npm run ex A3
  */
 import { describe, expect, it } from 'vitest';
 import { SignupSchema, UploadSchema } from '@/account/account-schema';
 import { validateForm } from '@/shared/form';
 
-/** What `formDataToObject(form)` gives for a correctly filled sign-up form. */
+/** Ce que `formDataToObject(form)` donne pour un formulaire d'inscription bien rempli. */
 const validForm = {
   email: 'alice@pxo.fr',
   displayName: 'Alice',
   password: 'a-long-enough-password',
   confirmPassword: 'a-long-enough-password',
   country: 'FR',
-  acceptTerms: 'on', // a checked checkbox sends "on"; an unchecked one sends nothing
+  acceptTerms: 'on', // une case cochée envoie "on" ; une case non cochée n'envoie rien
 };
 
 const file = (sizeInBytes: number, type: string, name = 'avatar') => new File([new Uint8Array(sizeInBytes)], name, { type });

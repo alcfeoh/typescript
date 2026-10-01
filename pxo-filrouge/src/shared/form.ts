@@ -1,23 +1,23 @@
-// A3 — One generic validation function for every form of the app.
+// A3 — Une seule fonction de validation générique pour tous les formulaires de l'app.
 import type * as z from 'zod';
 import { todo } from '@/shared/todo';
 
 /**
- * One error message per field, keyed by the form's field names.
+ * Un message d'erreur par champ, indexé par le nom des champs du formulaire.
  * FieldErrors<{ email: string; age: number }> → { email?: string; age?: string }
  */
 export type FieldErrors<T> = any; // TODO A3
 
 /**
- * Either the parsed data (typed as the schema's OUTPUT),
- * or the field errors (keyed by the schema's INPUT fields).
+ * Soit les données validées (typées selon la SORTIE du schéma),
+ * soit les erreurs par champ (indexées par les champs de l'ENTRÉE du schéma).
  */
 export type FormResult<In, Out> = any; // TODO A3
 
 /**
- * TODO A3: make this function generic, so that
- *   validateForm(SignupSchema, raw) returns FormResult<SignupFormInput, SignupData>
- * Keep only the FIRST message of each field.
+ * TODO A3 : rendez cette fonction générique, pour que
+ *   validateForm(SignupSchema, raw) renvoie FormResult<SignupFormInput, SignupData>
+ * Ne gardez que le PREMIER message de chaque champ.
  */
 export function validateForm(schema: z.ZodType, input: unknown): any {
   return todo('A3');

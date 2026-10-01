@@ -1,9 +1,9 @@
-// Solution — M2 (Previewable). The rest is identical to src/media/player.ts.
+// Solution — M2 (Previewable). Le reste est identique à src/media/player.ts.
 import { clamp } from '@/shared/clamp';
 import { logged } from '@/shared/decorators';
 import type { Constructor } from '@/shared/mixins';
 
-/** The part of HTMLVideoElement the player uses. A fake object is enough in the tests. */
+/** La partie de HTMLVideoElement dont le lecteur se sert. Dans les tests, un faux objet suffit. */
 export interface VideoLike {
   play(): Promise<void>;
   pause(): void;
@@ -43,10 +43,10 @@ export function Playable<TBase extends Constructor<BasePlayer>>(Base: TBase) {
 
 export function Seekable<TBase extends Constructor<BasePlayer>>(Base: TBase) {
   return class Seekable extends Base {
-    /** Jumps to `seconds`, kept within [0, duration]. */
+    /** Va à `seconds`, borné entre 0 et la durée. */
     @logged
     seek(seconds: number): void {
-      // duration is NaN until the metadata is loaded (preload="none"): everything clamps to 0 then.
+      // duration vaut NaN tant que les métadonnées ne sont pas chargées (preload="none") : tout est alors ramené à 0.
       const end = Number.isFinite(this.video.duration) ? this.video.duration : 0;
       this.video.currentTime = Math.min(Math.max(0, seconds || 0), end);
     }
@@ -78,7 +78,7 @@ export function Audible<TBase extends Constructor<BasePlayer>>(Base: TBase) {
   };
 }
 
-/** What Previewable needs from the class it extends. */
+/** Ce dont Previewable a besoin dans la classe qu'il étend. */
 interface PlaybackControls {
   play(): Promise<void>;
   pause(): void;
@@ -86,9 +86,9 @@ interface PlaybackControls {
 }
 
 /**
- * M2 — The hover preview: muted, from 10 % of the video, then back to the start.
- * The constraint is the contract: the mixin can only be applied on top of a class
- * that already knows how to play, pause and seek.
+ * M2 — L'aperçu au survol : sans le son, à partir de 10 % de la vidéo, puis retour au début.
+ * La contrainte est le contrat : le mixin ne s'applique que sur une classe
+ * qui sait déjà lire, mettre en pause et se déplacer dans la vidéo.
  */
 export function Previewable<TBase extends Constructor<BasePlayer & PlaybackControls>>(Base: TBase) {
   return class Previewable extends Base {

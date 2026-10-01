@@ -1,11 +1,11 @@
-// Runs the tests of ONE exercise. Each exercise has its own test files, named after it:
+// Lance les tests d'UN exercice. Chaque exercice a ses propres fichiers de tests, nommés d'après lui :
 // tests/2-chat/C3-batch.test-d.ts, tests/1-account/A1-signup-schema.spec.ts, …
 //
-//   npm run ex A1        → Vitest in watch mode: runtime + type tests of A1, re-run on every save
-//   npm run ex:once A1   → the same, run once
-//   npm run ex T2        → Playwright (T2, M5): tests/e2e/T2-login.e2e.ts, run once
+//   npm run ex A1        → Vitest en mode watch : tests d'exécution + tests de types de A1, relancés à chaque sauvegarde
+//   npm run ex:once A1   → la même chose, une seule fois
+//   npm run ex T2        → Playwright (T2, M5) : tests/e2e/T2-login.e2e.ts, une seule fois
 //
-// Works on macOS, Linux and Windows.
+// Fonctionne sous macOS, Linux et Windows.
 import { spawn } from 'node:child_process';
 
 const VITEST_STEPS = ['T1', 'A1', 'A2', 'A3', 'A4', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'M1', 'M2', 'M3', 'M4', 'B1', 'B2', 'B3'];
@@ -20,13 +20,13 @@ function run(command, commandArgs) {
   child.on('exit', (code) => process.exit(code ?? 1));
 }
 
-// Both runners take a file-name filter: "A1-" matches A1-signup-schema.spec.ts and .test-d.ts.
+// Les deux outils acceptent un filtre sur le nom de fichier : "A1-" trouve A1-signup-schema.spec.ts et .test-d.ts.
 const filter = (s) => (s === 'T1' ? 'typing-indicator' : `${s}-`);
 
 if (step && VITEST_STEPS.includes(step)) {
   run('npx', ['vitest', once ? 'run' : 'watch', filter(step)]);
 } else if (step && PLAYWRIGHT_STEPS.includes(step)) {
-  run('npx', ['playwright', 'test', filter(step)]); // no watch mode in Playwright: see npm run e2e:ui
+  run('npx', ['playwright', 'test', filter(step)]); // Playwright n'a pas de mode watch : voir npm run e2e:ui
 } else {
   console.error('Usage: npm run ex <step>        (watch mode)');
   console.error('       npm run ex:once <step>   (run once)');

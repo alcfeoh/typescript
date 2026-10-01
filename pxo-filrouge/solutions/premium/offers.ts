@@ -25,7 +25,7 @@ export function monthlyCost(offer: PaidOffer): number {
     case 'lifetime':
       return offer.price / 36;
     default: {
-      // `offer` is never here. Assigning it to a `never` variable is the check.
+      // Ici, `offer` vaut never. L'affecter à une variable de type `never` est la vérification.
       const unreachable: never = offer;
       return unreachable;
     }
@@ -43,6 +43,6 @@ export function priceLabel(offer: Offer): string {
     case 'lifetime':
       return `${formatPrice(offer.price)} once, ${offer.seats} ${offer.seats === 1 ? 'seat' : 'seats'}`;
   }
-  // No default needed: with every case returning, TS knows the end is unreachable,
-  // and a missing case would be reported as "not all code paths return a value".
+  // Pas besoin de default : comme chaque cas retourne, TS sait que la fin est inatteignable,
+  // et un cas manquant serait signalé par « Function lacks ending return statement ».
 }

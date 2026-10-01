@@ -1,6 +1,6 @@
 /**
- * B1 — KeysMatching & searchBy — type-level test: checked by tsc, never executed.
- * Run: npm run ex B1
+ * B1 — KeysMatching et searchBy — tests de types : vérifiés par tsc, jamais exécutés.
+ * Lancer : npm run ex B1
  */
 import { describe, expectTypeOf, it } from 'vitest';
 import { COUNTRIES, type Country } from '@/shared/countries';
@@ -17,7 +17,7 @@ describe('B1 — KeysMatching & searchBy', () => {
     expectTypeOf(searchBy(COUNTRIES, 'name', 'fr')).toEqualTypeOf<Country[]>();
 
     const users = [{ name: 'Alice', age: 42 }];
-    // @ts-expect-error — `age` is a number
+    // @ts-expect-error — `age` est un nombre
     searchBy(users, 'age', '42');
   });
 });

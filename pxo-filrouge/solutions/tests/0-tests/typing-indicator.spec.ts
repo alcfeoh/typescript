@@ -1,4 +1,4 @@
-// Solution — T1 (Vitest, fake timers).
+// Solution — T1 (Vitest, fausses horloges).
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createTypingIndicator } from '@/chat/typing-indicator';
 

@@ -1,6 +1,6 @@
 /**
- * A3 — FieldErrors, FormResult, validateForm — type-level test: checked by tsc, never executed.
- * Run: npm run ex A3
+ * A3 — FieldErrors, FormResult, validateForm — tests de types : vérifiés par tsc, jamais exécutés.
+ * Lancer : npm run ex A3
  */
 import { describe, expectTypeOf, it } from 'vitest';
 import type { SignupData, SignupFormInput } from '@/account/account-schema';

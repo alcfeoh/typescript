@@ -1,6 +1,6 @@
 /**
- * B2 — PaidOffer — type-level test: checked by tsc, never executed.
- * Run: npm run ex B2
+ * B2 — PaidOffer — tests de types : vérifiés par tsc, jamais exécutés.
+ * Lancer : npm run ex B2
  */
 import { describe, expectTypeOf, it } from 'vitest';
 import type { Offer, PaidOffer } from '@/premium/offers';

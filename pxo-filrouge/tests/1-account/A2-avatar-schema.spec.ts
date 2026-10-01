@@ -1,6 +1,6 @@
 /**
- * A2 — AvatarSchema & UploadSchema — runtime test.
- * Run: npm run ex A2
+ * A2 — AvatarSchema et UploadSchema — tests d'exécution.
+ * Lancer : npm run ex A2
  */
 import { describe, expect, it } from 'vitest';
 import { AvatarSchema, UploadSchema } from '@/account/account-schema';

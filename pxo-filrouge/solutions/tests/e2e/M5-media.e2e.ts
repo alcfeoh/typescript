@@ -1,4 +1,4 @@
-// Solution — M5 (optional): what only a real browser can check.
+// Solution — M5 (optionnel) : ce que seul un vrai navigateur peut vérifier.
 import { expect, test } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
@@ -7,7 +7,7 @@ test.beforeEach(async ({ page }) => {
 
 test('the browser picks the AVIF poster', async ({ page }) => {
   const poster = page.locator('.media-card img').first();
-  // currentSrc is the URL the browser actually chose among <source> and <img>.
+  // currentSrc est l'URL que le navigateur a réellement choisie parmi les <source> et l'<img>.
   await expect.poll(() => poster.evaluate((img: HTMLImageElement) => img.currentSrc)).toMatch(/\.avif$/);
 });
 

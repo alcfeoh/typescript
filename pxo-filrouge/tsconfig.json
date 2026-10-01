@@ -1,6 +1,6 @@
 {
-  // Starter configuration: `@/x` → src/x. Used by the editor, `npm run typecheck`
-  // and the type-level tests (*.test-d.ts) run by Vitest.
+  // Configuration de départ : `@/x` → src/x. Utilisée par l'éditeur, `npm run typecheck`
+  // et les tests de types (*.test-d.ts) lancés par Vitest.
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",

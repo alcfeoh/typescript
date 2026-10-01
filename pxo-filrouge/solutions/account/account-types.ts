@@ -1,14 +1,14 @@
 // Solution — A4.
 import type { signup, uploadAvatar } from '@/account/account-api';
 
-// ReturnType gives Promise<…>; Awaited unwraps it.
+// ReturnType donne Promise<…> ; Awaited en extrait le contenu.
 export type SignupResponse = Awaited<ReturnType<typeof signup>>;
 
-// NonNullable removes null and undefined from a union.
+// NonNullable retire null et undefined d'une union.
 export type Session = NonNullable<SignupResponse>;
 
-// Indexed access type.
+// Accès indexé sur un type.
 export type User = Session['user'];
 
-// Parameters gives a tuple: [file: File, options?: {…}] → element 1, then remove `undefined`.
+// Parameters donne un tuple : [file: File, options?: {…}] → élément 1, puis on retire `undefined`.
 export type UploadOptions = NonNullable<Parameters<typeof uploadAvatar>[1]>;

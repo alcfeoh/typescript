@@ -1,6 +1,6 @@
 /**
- * C2 — PayloadOf (infer) & EventWithoutPayload (distributivity) — type-level test: checked by tsc, never executed.
- * Run: npm run ex C2
+ * C2 — PayloadOf (infer) et EventWithoutPayload (distributivité) — tests de types : vérifiés par tsc, jamais exécutés.
+ * Lancer : npm run ex C2
  */
 import { describe, expectTypeOf, it } from 'vitest';
 import type { Emoji, MessageId, UserId } from '@/chat/chat-events';

@@ -1,4 +1,4 @@
-// Pre-coded — the chat page (Case 2). It comes to life once C5, C6 and C7 are done.
+// Déjà codé — la page du chat (Cas 2). Elle prend vie une fois C5, C6 et C7 faits.
 import { ChatBus } from '@/chat/chat-bus';
 import { DISPLAY_NAMES, EMOJIS, ME, type MessageId } from '@/chat/chat-events';
 import { chatReducer, initialState, type ChatState, type Message } from '@/chat/chat-reducer';
@@ -9,7 +9,7 @@ import { $ } from '@/shared/dom';
 import { html, render, type SafeHtml } from '@/shared/html';
 import { TodoError } from '@/shared/todo';
 
-/** Which Case 2 steps are still stubs? */
+/** Quelles étapes du Cas 2 sont encore à faire ? */
 function missingSteps(): string[] {
   const checks: [string, () => unknown][] = [
     ['C5', () => new ChatBus().on('ping', () => {})],
@@ -82,7 +82,7 @@ export function mountChat(root: HTMLElement): () => void {
   const bus = new ChatBus();
   let state = initialState;
 
-  // Side effects live in bus handlers; the state lives in the reducer.
+  // Les effets de bord vivent dans les handlers du bus ; l'état vit dans le reducer.
   bus.on('message', (event) => {
     if (event.payload.author !== ME) {
       server.send({ type: 'read', payload: { messageId: event.payload.id, reader: ME } });

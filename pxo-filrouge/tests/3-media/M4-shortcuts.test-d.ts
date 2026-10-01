@@ -1,6 +1,6 @@
 /**
- * M4 — commands typed from the class — type-level test: checked by tsc, never executed.
- * Run: npm run ex M4
+ * M4 — commandes typées à partir de la classe — tests de types : vérifiés par tsc, jamais exécutés.
+ * Lancer : npm run ex M4
  */
 import { describe, expectTypeOf, it } from 'vitest';
 import { type VideoPlayer } from '@/media/player';
@@ -37,11 +37,11 @@ describe('M4 — commands typed from the class', () => {
   it('a Shortcut is a command followed by ITS arguments', () => {
     const skip: Shortcut = ['skip', 10];
     const toggle: Shortcut = ['togglePlay'];
-    // @ts-expect-error — skip takes a number
+    // @ts-expect-error — skip attend un nombre
     const wrongType: Shortcut = ['skip', '10'];
-    // @ts-expect-error — seek needs its argument
+    // @ts-expect-error — seek a besoin de son argument
     const missing: Shortcut = ['seek'];
-    // @ts-expect-error — volume is a setter, not a command
+    // @ts-expect-error — volume est un setter, pas une commande
     const notACommand: Shortcut = ['volume', 1];
     void [skip, toggle, wrongType, missing, notACommand];
   });

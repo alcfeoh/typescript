@@ -1,7 +1,7 @@
-// Pre-coded — the country list used by the sign-up form.
+// Déjà codé — la liste des pays utilisée par le formulaire d'inscription.
 //
-// `as const` keeps every code as a literal type ('FR', not string), so the union of
-// valid codes is derived from the data: add a country here, the type follows.
+// `as const` garde chaque code comme type littéral ('FR', pas string) : l'union des codes
+// valides est dérivée des données. Ajoutez un pays ici, le type suit.
 
 export const COUNTRIES = [
   { code: 'FR', name: 'France', dialCode: '+33' },
@@ -19,10 +19,10 @@ export const COUNTRIES = [
 export type Country = (typeof COUNTRIES)[number];
 export type CountryCode = Country['code'];
 
-/** ['FR', 'BE', …] typed as a non-empty tuple of literals — exactly what z.enum() expects. */
+/** ['FR', 'BE', …] typé comme un tuple non vide de littéraux — exactement ce qu'attend z.enum(). */
 export const COUNTRY_CODES = COUNTRIES.map((c) => c.code) as [CountryCode, ...CountryCode[]];
 
-/** 'FR' → '🇫🇷' (two regional indicator symbols). */
+/** 'FR' → '🇫🇷' (deux symboles « regional indicator »). */
 export function flagEmoji(code: CountryCode): string {
   return String.fromCodePoint(...[...code].map((char) => 0x1f1e6 + char.charCodeAt(0) - 65));
 }

@@ -1,23 +1,23 @@
-// C7 — The WebSocket delivers strings. TypeScript types vanish at runtime:
-// validate what comes in, at the boundary, with Zod.
+// C7 — Le WebSocket transporte des chaînes. Les types TypeScript disparaissent à l'exécution :
+// on valide ce qui arrive, à la frontière, avec Zod.
 import * as z from 'zod';
 import type { Batch } from '@/chat/chat-types';
 import type { ChatEvent } from '@/chat/chat-events';
 import { todo } from '@/shared/todo';
 
 /**
- * TODO C7: z.discriminatedUnion('type', [...]) with one z.object per event.
- * Its output type must be EXACTLY ChatEvent — a type-level test checks it.
+ * TODO C7 : z.discriminatedUnion('type', [...]) avec un z.object par événement.
+ * Son type de sortie doit être EXACTEMENT ChatEvent — un test de type le vérifie.
  */
 export const ChatEventSchema = z.any();
 
 /**
- * A frame is the JSON text of a batch: an array of events, e.g.
+ * Une frame est le texte JSON d'un lot : un tableau d'événements, par exemple
  *   '[{"type":"typing","payload":{…}},{"type":"message","payload":{…}}]'
  *
- * Returns the valid events, in order. It must never throw — one bad frame must not kill the chat:
- * - not valid JSON, or not an array → empty batch
- * - an invalid event → skipped (console.warn it), the others are kept
+ * Renvoie les événements valides, dans l'ordre. Ne doit jamais lever d'erreur — une frame cassée ne doit pas casser le chat :
+ * - JSON invalide, ou pas un tableau → lot vide
+ * - un événement invalide → ignoré (avec un console.warn), les autres sont gardés
  */
 export function parseWireFrame(raw: string): Batch<ChatEvent> {
   return todo('C7');

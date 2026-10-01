@@ -1,18 +1,18 @@
 /**
- * A1 — SignupSchema — runtime test.
- * Run: npm run ex A1
+ * A1 — SignupSchema — tests d'exécution.
+ * Lancer : npm run ex A1
  */
 import { describe, expect, it } from 'vitest';
 import { SignupSchema } from '@/account/account-schema';
 
-/** What `formDataToObject(form)` gives for a correctly filled sign-up form. */
+/** Ce que `formDataToObject(form)` donne pour un formulaire d'inscription bien rempli. */
 const validForm = {
   email: 'alice@pxo.fr',
   displayName: 'Alice',
   password: 'a-long-enough-password',
   confirmPassword: 'a-long-enough-password',
   country: 'FR',
-  acceptTerms: 'on', // a checked checkbox sends "on"; an unchecked one sends nothing
+  acceptTerms: 'on', // une case cochée envoie "on" ; une case non cochée n'envoie rien
 };
 
 function messagesFor(result: { success: boolean; error?: { issues: { path: PropertyKey[]; message: string }[] } }, field: string) {
@@ -29,7 +29,7 @@ describe('A1 — SignupSchema', () => {
       password: 'a-long-enough-password',
       confirmPassword: 'a-long-enough-password',
       country: 'FR',
-      newsletter: false, // unchecked: absent from the form → false
+      newsletter: false, // case non cochée : absente du formulaire → false
       acceptTerms: true,
     });
   });

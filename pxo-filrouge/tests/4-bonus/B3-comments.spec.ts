@@ -1,6 +1,6 @@
 /**
- * B3 — comments — runtime test.
- * Run: npm run ex B3
+ * B3 — commentaires — tests d'exécution.
+ * Lancer : npm run ex B3
  */
 import { describe, expect, it } from 'vitest';
 import { countNodes, flattenTree, ThreadSchema, type CommentNode } from '@/comments/comments';

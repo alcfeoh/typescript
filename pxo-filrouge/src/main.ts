@@ -1,4 +1,4 @@
-// Pre-coded — a tiny hash router: #/login, #/signup, #/chat, #/media, #/premium
+// Déjà codé — un petit routeur par hash : #/login, #/signup, #/chat, #/media, #/premium
 import { mountLogin } from '@/account/login-page';
 import { mountSignup } from '@/account/signup-page';
 import { mountChat } from '@/chat/chat-page';

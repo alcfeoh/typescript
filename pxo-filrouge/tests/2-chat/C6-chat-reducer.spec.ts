@@ -1,6 +1,6 @@
 /**
- * C6 — chatReducer — runtime test.
- * Run: npm run ex C6
+ * C6 — chatReducer — tests d'exécution.
+ * Lancer : npm run ex C6
  */
 import { describe, expect, it } from 'vitest';
 import { BOT, ME, type ChatEvent } from '@/chat/chat-events';

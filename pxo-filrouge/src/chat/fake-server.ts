@@ -1,5 +1,5 @@
-// Pre-coded — stands in for the WebSocket server. It pushes FRAMES: JSON strings, each one a batch
-// of events. On purpose, a few frames are broken (bad JSON, invalid event): C7 must survive them.
+// Déjà codé — remplace le serveur WebSocket. Il envoie des FRAMES : des chaînes JSON, chacune contenant
+// un lot d'événements. Quelques frames sont volontairement cassées (JSON invalide, événement invalide) : C7 doit y survivre.
 import { BOT, type ChatEvent, type MessageId } from '@/chat/chat-events';
 import type { OutgoingEvent } from '@/chat/chat-types';
 
@@ -31,12 +31,12 @@ export class FakeChatServer {
       { type: 'message', payload: { id: hello, author: BOT, text: 'Bonjour ! Comment puis-je vous aider ?', sentAt: Date.now() } },
     ]);
     this.#laterRaw(1800, '{ this is not JSON');
-    // A valid ping, then a message with an invalid payload: only the ping should get through.
+    // Un ping valide, puis un message au payload invalide : seul le ping doit passer.
     this.#laterRaw(2000, JSON.stringify([{ type: 'ping' }, { type: 'message', payload: { id: 42 } }]));
   }
 
   send(event: OutgoingEvent): void {
-    this.#later(50, [event]); // echo: the server broadcasts it back
+    this.#later(50, [event]); // écho : le serveur renvoie l'événement à tous
     if (event.type !== 'message') return;
 
     const messageId: MessageId = event.payload.id;

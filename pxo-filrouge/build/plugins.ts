@@ -6,8 +6,8 @@ import type { Connect, Plugin } from 'vite';
 import { root } from './overrides.ts';
 
 /**
- * `@/x` → solutions/x.ts (solution mode, if it exists) → src/x.ts.
- * The same fallback is declared for tsc in solutions/tsconfig.json (`paths`).
+ * `@/x` → solutions/x.ts (en mode solution, s'il existe) → src/x.ts.
+ * La même règle est déclarée pour tsc dans solutions/tsconfig.json (`paths`).
  */
 export function exerciseResolver(solution: boolean): Plugin {
   const folders = solution ? ['solutions', 'src'] : ['src'];
@@ -29,9 +29,9 @@ export function exerciseResolver(solution: boolean): Plugin {
 }
 
 /**
- * Vite 8 compiles TypeScript with Oxc, which only lowers *legacy* (experimentalDecorators)
- * decorators. The TC39 standard decorators used in Case 3 are not supported by Node or
- * browsers yet, so we let the TypeScript compiler lower them, file by file, before Oxc runs.
+ * Vite 8 compile le TypeScript avec Oxc, qui ne sait transformer que les décorateurs *legacy*
+ * (experimentalDecorators). Les décorateurs standards TC39 du Cas 3 ne sont pas encore pris en charge
+ * par Node ni par les navigateurs : on les fait donc transformer par TypeScript, fichier par fichier, avant Oxc.
  */
 export function standardDecorators(): Plugin {
   return {
@@ -55,7 +55,7 @@ export function standardDecorators(): Plugin {
 }
 
 // ---------------------------------------------------------------------------
-// Fake backend, served by the Vite dev server itself: POST /api/login, /api/signup, /api/avatar
+// Faux back-end, servi par le serveur de dev Vite lui-même : POST /api/login, /api/signup, /api/avatar
 // ---------------------------------------------------------------------------
 
 const DEMO_USER = {
@@ -105,7 +105,7 @@ const fakeApi: Connect.NextHandleFunction = async (req, res, next) => {
       return send(res, 201, { user, token: `tok_${user.id}` });
     }
     case '/api/avatar':
-      // The multipart body is read and ignored: we only care about the client side.
+      // Le corps multipart est lu puis ignoré : seul le côté client nous intéresse.
       return send(res, 200, { url: '/media/poster-2.jpg', bytes: body.length }, 800);
     default:
       return send(res, 404, { error: 'Not found' });

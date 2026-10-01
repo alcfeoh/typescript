@@ -1,4 +1,4 @@
-// Pre-coded — the premium offer picker (bonus B2).
+// Déjà codé — le choix d'une offre premium (bonus B2).
 import { monthlyCost, OFFERS, priceLabel, type Offer } from '@/premium/offers';
 import { $ } from '@/shared/dom';
 import { formatPrice } from '@/shared/format';

@@ -1,4 +1,4 @@
-/** Thrown by every exercise stub. Pages catch it and show which step is missing. */
+/** Levée par chaque exercice pas encore fait. Les pages l'interceptent et affichent l'étape manquante. */
 export class TodoError extends Error {
   constructor(readonly step: string) {
     super(`Exercise ${step} is not done yet`);

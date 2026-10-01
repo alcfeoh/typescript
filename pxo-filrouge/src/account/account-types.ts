@@ -1,18 +1,18 @@
-// A4 — Derive the types the pages need from account-api.ts, which does not export them.
-// Tools: ReturnType, Awaited, NonNullable, Parameters, indexed access (T['key']).
+// A4 — Dérivez les types dont les pages ont besoin à partir d'account-api.ts, qui ne les exporte pas.
+// Outils : ReturnType, Awaited, NonNullable, Parameters, accès indexé (T['clé']).
 //
-// Every placeholder is `any`: everything compiles, nothing is checked.
-// Replace them one by one — then run `npm run typecheck` and look at welcome.ts.
+// Chaque type à écrire vaut `any` : tout compile, rien n'est vérifié.
+// Remplacez-les un par un — puis lancez `npm run typecheck` et regardez welcome.ts.
 import type { signup, uploadAvatar } from '@/account/account-api';
 
-/** What `signup()` resolves to, null included. */
+/** Ce que `signup()` renvoie une fois la promesse résolue, null compris. */
 export type SignupResponse = any; // TODO A4
 
-/** A successful sign-up: SignupResponse without the null. */
+/** Une inscription réussie : SignupResponse sans le null. */
 export type Session = any; // TODO A4
 
-/** The `user` part of a Session. */
+/** La partie `user` d'une Session. */
 export type User = any; // TODO A4
 
-/** The options object `uploadAvatar()` accepts (the second parameter, without undefined). */
+/** L'objet d'options accepté par `uploadAvatar()` (son second paramètre, sans undefined). */
 export type UploadOptions = any; // TODO A4

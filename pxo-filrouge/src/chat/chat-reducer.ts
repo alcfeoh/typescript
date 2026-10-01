@@ -1,4 +1,4 @@
-// C6 — The chat state, updated by a reducer: (state, event) → new state. No mutation.
+// C6 — L'état du chat, mis à jour par un reducer : (état, événement) → nouvel état. Sans mutation.
 import type { ChatEvent, Emoji, MessageId, UserId } from '@/chat/chat-events';
 import type { EventOf, PayloadOf } from '@/chat/chat-types';
 
@@ -6,13 +6,13 @@ export type Message = PayloadOf<EventOf<'message'>>;
 
 export interface ChatState {
   messages: Message[];
-  /** Who is typing right now. */
+  /** Qui est en train d'écrire. */
   typing: UserId[];
-  /** Who has read each message. */
+  /** Qui a lu chaque message. */
   readBy: Partial<Record<MessageId, UserId[]>>;
-  /** Count of each emoji, per message. */
+  /** Nombre de chaque emoji, par message. */
   reactions: Partial<Record<MessageId, Partial<Record<Emoji, number>>>>;
-  /** Text of the system notices, oldest first. */
+  /** Texte des notifications système, de la plus ancienne à la plus récente. */
   notices: string[];
 }
 
@@ -23,14 +23,14 @@ export function chatReducer(state: ChatState, event: ChatEvent): ChatState {
     case 'message':
       return { ...state, messages: [...state.messages, event.payload] };
 
-    // TODO C6: handle 'typing', 'read', 'reaction', 'system' and 'ping' (see README),
-    // then replace this default with the exhaustiveness check below.
+    // TODO C6 : traitez 'typing', 'read', 'reaction', 'system' et 'ping' (voir README),
+    // puis remplacez ce default par la vérification d'exhaustivité ci-dessous.
     default:
       return state;
   }
 }
 
-/** Only accepts `never`: calling it with anything else is a compile error. */
+/** N'accepte que `never` : l'appeler avec autre chose est une erreur de compilation. */
 export function assertNever(value: never): never {
   throw new Error(`Unhandled chat event: ${JSON.stringify(value)}`);
 }

@@ -1,6 +1,6 @@
 /**
- * B1 — searchBy — runtime test.
- * Run: npm run ex B1
+ * B1 — searchBy — tests d'exécution.
+ * Lancer : npm run ex B1
  */
 import { describe, expect, it } from 'vitest';
 import { COUNTRIES } from '@/shared/countries';

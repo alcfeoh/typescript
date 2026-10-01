@@ -1,12 +1,12 @@
 /**
- * B2 — offers — runtime test.
- * Run: npm run ex B2
+ * B2 — offres — tests d'exécution.
+ * Lancer : npm run ex B2
  */
 import { describe, expect, it } from 'vitest';
 import { monthlyCost, priceLabel } from '@/premium/offers';
 
 describe('B2 — offers', () => {
-  // Intl.NumberFormat('fr-FR') puts a narrow no-break space before "€": compare with plain spaces.
+  // Intl.NumberFormat('fr-FR') met une espace fine insécable avant "€" : on compare avec des espaces simples.
   const label = (offer: Parameters<typeof priceLabel>[0]) => priceLabel(offer).replace(/\s/g, ' ');
 
   it('labels every kind of offer', () => {

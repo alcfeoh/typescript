@@ -1,6 +1,6 @@
 /**
- * A1 — input vs output types of the sign-up schema — type-level test: checked by tsc, never executed.
- * Run: npm run ex A1
+ * A1 — types d'entrée et de sortie du schéma d'inscription — tests de types : vérifiés par tsc, jamais exécutés.
+ * Lancer : npm run ex A1
  */
 import { describe, expectTypeOf, it } from 'vitest';
 import type { SignupData, SignupFormInput } from '@/account/account-schema';

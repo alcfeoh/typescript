@@ -1,19 +1,19 @@
 // Solution — M4.
 import type { VideoPlayer } from '@/media/player';
 
-// Mapped type + conditional: keep K when T[K] is a function, then collect the keys.
-// Getters are properties to the type system: `volume` (number) and `isPlaying` (boolean) drop out.
+// Mapped type + conditionnel : on garde K quand T[K] est une fonction, puis on réunit les clés.
+// Pour le système de types, un getter est une propriété : `volume` (number) et `isPlaying` (boolean) sont éliminés.
 export type MethodKeys<T> = {
   [K in keyof T]: T[K] extends (...args: never[]) => unknown ? K : never;
 }[keyof T];
 
-// Parameters<T[K]> fails: its constraint `(...args: any) => any` cannot be proven for T[K].
-// Writing the conditional ourselves, with infer, has no such constraint.
+// Parameters<T[K]> échoue : sa contrainte `(...args: any) => any` ne peut pas être prouvée pour T[K].
+// En écrivant le conditionnel nous-mêmes, avec infer, on n'a pas cette contrainte.
 export type ArgsOf<T, K extends keyof T> = T[K] extends (...args: infer A) => unknown ? A : never;
 
 export type PlayerCommand = MethodKeys<VideoPlayer>;
 
-// One tuple type per command, then indexed by all commands → the union of the valid tuples.
+// Un type tuple par commande, puis indexé par toutes les commandes → l'union des tuples valides.
 export type Shortcut = {
   [C in PlayerCommand]: [C, ...ArgsOf<VideoPlayer, C>];
 }[PlayerCommand];

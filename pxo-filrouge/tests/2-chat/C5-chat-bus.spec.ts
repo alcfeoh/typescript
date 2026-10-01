@@ -1,6 +1,6 @@
 /**
- * C5 — ChatBus — runtime test.
- * Run: npm run ex C5
+ * C5 — ChatBus — tests d'exécution.
+ * Lancer : npm run ex C5
  */
 import { describe, expect, it, vi } from 'vitest';
 import { ChatBus } from '@/chat/chat-bus';

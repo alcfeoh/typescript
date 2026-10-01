@@ -1,6 +1,6 @@
 /**
- * B3 — recursive schema & generic trees — type-level test: checked by tsc, never executed.
- * Run: npm run ex B3
+ * B3 — schéma récursif et arbres génériques — tests de types : vérifiés par tsc, jamais exécutés.
+ * Lancer : npm run ex B3
  */
 import { describe, expectTypeOf, it } from 'vitest';
 import type * as z from 'zod';
@@ -15,7 +15,7 @@ describe('B3 — recursive schema & generic trees', () => {
     const menu = [{ label: 'File', replies: [] as { label: string; replies: never[] }[] }];
     expectTypeOf(flattenTree(menu)[0]!.node.label).toBeString();
 
-    // @ts-expect-error — not a tree: no `replies`
+    // @ts-expect-error — pas un arbre : pas de `replies`
     flattenTree([{ label: 'File' }]);
   });
 });

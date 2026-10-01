@@ -1,14 +1,14 @@
-// M3 — A setter decorator (TC39 standard decorators, no `experimentalDecorators`).
+// M3 — Un décorateur de setter (décorateurs standards TC39, sans `experimentalDecorators`).
 //
 //   class Audible { @clamp(0, 1) set volume(value: number) { this.video.volume = value; } }
-//   player.volume = 1.4   →  the setter receives 1
+//   player.volume = 1.4   →  le setter reçoit 1
 //
-// Why it matters here: HTMLMediaElement.volume THROWS (IndexSizeError) outside [0, 1].
+// Pourquoi c'est utile ici : HTMLMediaElement.volume LÈVE une erreur (IndexSizeError) en dehors de [0, 1].
 
 /**
- * Returns the decorator. A setter decorator receives the original setter and returns
- * the setter that replaces it.
- * TODO M3: return a setter that clamps the value between min and max, then calls the original one.
+ * Renvoie le décorateur. Un décorateur de setter reçoit le setter d'origine et renvoie
+ * le setter qui le remplace.
+ * TODO M3 : renvoyez un setter qui borne la valeur entre min et max, puis appelle celui d'origine.
  */
 export function clamp(min: number, max: number) {
   return function <This>(

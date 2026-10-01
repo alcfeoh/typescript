@@ -1,4 +1,4 @@
-// Solution — T2 (Playwright, login page).
+// Solution — T2 (Playwright, page de connexion).
 import { expect, test } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {

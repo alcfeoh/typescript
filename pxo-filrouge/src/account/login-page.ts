@@ -1,4 +1,4 @@
-// Pre-coded — the login page. It is the target of the Playwright part (T2).
+// Déjà codé — la page de connexion. C'est la cible de la partie Playwright (T2).
 import { ApiError, login } from '@/account/account-api';
 import { LoginSchema } from '@/account/account-schema';
 import { $, formDataToObject, showFieldErrors } from '@/shared/dom';
@@ -35,7 +35,7 @@ export function mountLogin(root: HTMLElement): void {
       const errors: Record<string, string> = {};
       for (const issue of parsed.error.issues) errors[String(issue.path[0])] ??= issue.message;
       showFieldErrors(form, errors);
-      return; // nothing is sent to the server
+      return; // rien n'est envoyé au serveur
     }
     showFieldErrors(form, {});
 

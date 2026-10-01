@@ -1,6 +1,6 @@
 /**
- * C7 — parseWireFrame — runtime test.
- * Run: npm run ex C7
+ * C7 — parseWireFrame — tests d'exécution.
+ * Lancer : npm run ex C7
  */
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { BOT, ME, type ChatEvent } from '@/chat/chat-events';
@@ -33,8 +33,8 @@ describe('C7 — parseWireFrame', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const frame = JSON.stringify([
       { type: 'ping' },
-      { type: 'message', payload: { id: 42 } }, // id must be "msg_…", author, text, sentAt are missing
-      { type: 'dance' }, // unknown type
+      { type: 'message', payload: { id: 42 } }, // id doit être "msg_…", et author, text, sentAt manquent
+      { type: 'dance' }, // type inconnu
       hello,
     ]);
 

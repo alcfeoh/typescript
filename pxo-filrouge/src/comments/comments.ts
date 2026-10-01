@@ -1,4 +1,4 @@
-// BONUS B3 — Threaded comments: a recursive type, a recursive Zod schema, recursive generics.
+// BONUS B3 — Commentaires en fil de discussion : un type récursif, un schéma Zod récursif, des génériques récursifs.
 import * as z from 'zod';
 import { todo } from '@/shared/todo';
 
@@ -12,8 +12,8 @@ export interface CommentNode {
 }
 
 /**
- * TODO B3.1: the Zod twin of CommentNode (text: at least 1 character).
- * A schema cannot mention itself while it is being defined… unless through a getter:
+ * TODO B3.1 : le jumeau Zod de CommentNode (text : au moins 1 caractère).
+ * Un schéma ne peut pas se citer lui-même pendant qu'on l'écrit… sauf dans un getter :
  *   get replies() { return z.array(CommentSchema); }
  */
 export const CommentSchema = z.any();
@@ -21,15 +21,15 @@ export const CommentSchema = z.any();
 export const ThreadSchema = z.array(CommentSchema);
 
 /**
- * TODO B3.2: make these generic. They must work for ANY tree whose nodes have `replies`
- * of their own type — CommentNode, a folder tree, a menu… — and keep the node type.
- * Hint: T extends { replies: readonly T[] }  (T appears in its own constraint).
+ * TODO B3.2 : rendez ces fonctions génériques. Elles doivent marcher pour N'IMPORTE QUEL arbre dont les nœuds
+ * ont des `replies` de leur propre type — CommentNode, une arborescence de dossiers, un menu… — et garder le type du nœud.
+ * Indice : T extends { replies: readonly T[] }  (T apparaît dans sa propre contrainte).
  */
 export function countNodes(nodes: readonly any[]): number {
   return todo('B3');
 }
 
-/** Depth-first, parents before their replies. Top-level nodes have depth 0. */
+/** En profondeur d'abord, chaque parent avant ses réponses. Les nœuds du premier niveau ont la profondeur 0. */
 export function flattenTree(nodes: readonly any[]): { node: any; depth: number }[] {
   return todo('B3');
 }

@@ -1,9 +1,9 @@
-// Starter vs solution: which files a solution replaces.
+// Mode de départ ou mode solution : quels fichiers une solution remplace.
 //
-// Every import inside src/, solutions/ and tests/ goes through the `@/` alias.
-// In solution mode (PXO_SOLUTION=1), `@/chat/chat-bus` resolves to
-// solutions/chat/chat-bus.ts when that file exists, and to src/chat/chat-bus.ts otherwise.
-// Test files work the same way: solutions/tests/x.spec.ts replaces tests/x.spec.ts.
+// Dans src/, solutions/ et tests/, tous les imports passent par l'alias `@/`.
+// En mode solution (PXO_SOLUTION=1), `@/chat/chat-bus` pointe vers
+// solutions/chat/chat-bus.ts si ce fichier existe, et vers src/chat/chat-bus.ts sinon.
+// Les tests suivent la même règle : solutions/tests/x.spec.ts remplace tests/x.spec.ts.
 import { existsSync, readdirSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -19,7 +19,7 @@ function listFiles(dir: string): string[] {
   });
 }
 
-/** tests/… files that have a counterpart in solutions/tests/… (POSIX paths, relative to the project). */
+/** Les fichiers tests/… qui ont un équivalent dans solutions/tests/… (chemins POSIX, relatifs au projet). */
 export function overriddenTests(): string[] {
   const solutionTests = join(root, 'solutions', 'tests');
   return listFiles(solutionTests).map((file) =>

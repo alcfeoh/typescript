@@ -1,9 +1,9 @@
 /**
- * T1 — Vitest warm-up (10 min): src/chat/typing-indicator.ts
+ * T1 — Échauffement Vitest (10 min) : src/chat/typing-indicator.ts
  *
- * Run:   npm run test:watch -- typing
- * Task:  the first test is written. Turn each `it.todo` into a real test.
- * Tools: vi.fn(), vi.useFakeTimers(), vi.advanceTimersByTime(ms), toHaveBeenCalledTimes / toHaveBeenLastCalledWith
+ * Lancer :    npm run ex T1
+ * Consigne :  le premier test est écrit. Transformez chaque `it.todo` en vrai test.
+ * Outils :    vi.fn(), vi.useFakeTimers(), vi.advanceTimersByTime(ms), toHaveBeenCalledTimes / toHaveBeenLastCalledWith
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createTypingIndicator } from '@/chat/typing-indicator';

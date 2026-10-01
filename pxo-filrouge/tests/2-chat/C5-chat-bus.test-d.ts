@@ -1,6 +1,6 @@
 /**
- * C5 — ChatBus.on is generic — type-level test: checked by tsc, never executed.
- * Run: npm run ex C5
+ * C5 — ChatBus.on est générique — tests de types : vérifiés par tsc, jamais exécutés.
+ * Lancer : npm run ex C5
  */
 import { describe, expectTypeOf, it } from 'vitest';
 import { ChatBus } from '@/chat/chat-bus';
@@ -20,7 +20,7 @@ describe('C5 — ChatBus.on is generic', () => {
   });
 
   it('rejects an unknown event type', () => {
-    // @ts-expect-error — 'tpying' is not a ChatEventType
+    // @ts-expect-error — 'tpying' n'est pas un ChatEventType
     bus.on('tpying', () => {});
   });
 

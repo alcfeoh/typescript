@@ -1,9 +1,9 @@
 /**
- * M1 — mediaCard — runtime test.
- * Run: npm run ex M1
+ * M1 — mediaCard — tests d'exécution.
+ * Lancer : npm run ex M1
  *
  * @vitest-environment happy-dom
- * (a DOM implemented in Node: enough to query the markup; it does not decode images or videos)
+ * (un DOM implémenté en Node : suffisant pour interroger le HTML ; il ne décode ni images ni vidéos)
  */
 import { describe, expect, it } from 'vitest';
 import { mediaCard } from '@/media/media-card';

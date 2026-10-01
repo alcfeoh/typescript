@@ -1,4 +1,4 @@
-// Solution — A1 & A2.
+// Solution — A1 et A2.
 import * as z from 'zod';
 import { COUNTRY_CODES } from '@/shared/countries';
 
@@ -9,8 +9,8 @@ export const LoginSchema = z.object({
 
 export const SignupSchema = z
   .object({
-    // Trap: z.email().trim() validates FIRST, then trims — "  a@b.fr " is rejected.
-    // To normalise before validating, transform a plain string and pipe it into z.email().
+    // Piège : z.email().trim() valide D'ABORD, puis supprime les espaces — "  a@b.fr " est refusé.
+    // Pour normaliser avant de valider, on transforme une chaîne simple, puis on la passe à z.email() avec pipe.
     email: z.string().trim().toLowerCase().pipe(z.email({ error: 'Invalid email' })),
     displayName: z
       .string()
@@ -20,12 +20,12 @@ export const SignupSchema = z
     password: z.string().min(12, { error: 'At least 12 characters' }),
     confirmPassword: z.string(),
     country: z.enum(COUNTRY_CODES, { error: 'Please pick a country' }),
-    // "on" / "true" / "1" / "yes"… → true. Unchecked box = absent → default false.
+    // "on" / "true" / "1" / "yes"… → true. Case non cochée = champ absent → false par défaut.
     newsletter: z.stringbool().default(false),
-    // Input 'on', output true: the API receives a boolean, not a checkbox quirk.
+    // Entrée 'on', sortie true : l'API reçoit un booléen, pas une particularité des cases à cocher.
     acceptTerms: z.literal('on', { error: 'You must accept the terms' }).transform(() => true as const),
   })
-  // Cross-field rule: a refinement on the object. `path` attaches the error to a field.
+  // Règle entre deux champs : un refine sur l'objet entier. `path` rattache l'erreur à un champ.
   .refine((data) => data.password === data.confirmPassword, {
     error: 'Passwords do not match',
     path: ['confirmPassword'],

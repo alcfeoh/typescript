@@ -1,6 +1,6 @@
-// Pre-coded — pretend this file is generated from the back-end's OpenAPI spec:
-// you may not edit it, and it does NOT export its response types.
-// Step A4 derives the types you need from the function signatures instead.
+// Déjà codé — faites comme si ce fichier était généré à partir de la spécification OpenAPI du back-end :
+// vous ne pouvez pas le modifier, et il n'exporte PAS les types de ses réponses.
+// L'étape A4 dérive les types dont vous avez besoin à partir des signatures des fonctions.
 import type { SignupData } from '@/account/account-schema';
 
 export class ApiError extends Error {
@@ -21,7 +21,7 @@ function postJson(url: string, body: unknown): Promise<Response> {
   });
 }
 
-/** Resolves to null when the credentials are wrong (HTTP 401). */
+/** Renvoie null quand les identifiants sont faux (HTTP 401). */
 export async function login(
   email: string,
   password: string,
@@ -32,7 +32,7 @@ export async function login(
   return response.json();
 }
 
-/** Resolves to null when the e-mail is already registered (HTTP 409). */
+/** Renvoie null quand l'e-mail est déjà enregistré (HTTP 409). */
 export async function signup(
   data: SignupData,
 ): Promise<{ user: { id: `usr_${string}`; email: string; displayName: string }; token: string } | null> {

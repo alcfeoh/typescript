@@ -1,5 +1,5 @@
-// Pre-coded — media model. Template literal types make the file formats part of the type:
-// swapping the AVIF and JPEG URLs, or forgetting an extension, does not compile.
+// Déjà codé — le modèle des médias. Les template literal types font du format de fichier une partie du type :
+// inverser les URL AVIF et JPEG, ou oublier une extension, ne compile pas.
 
 export type AvifUrl = `${string}.avif`;
 export type JpegUrl = `${string}.jpg` | `${string}.jpeg`;
@@ -11,9 +11,9 @@ export interface Media {
   id: MediaId;
   title: string;
   durationSeconds: number;
-  /** AVIF when the browser supports it, JPEG otherwise. */
+  /** AVIF quand le navigateur le prend en charge, JPEG sinon. */
   poster: { avif: AvifUrl; jpeg: JpegUrl };
-  /** Short silent clip played on hover. WebM is an optional fallback. */
+  /** Court extrait muet joué au survol. Le WebM est un repli facultatif. */
   preview: { mp4: Mp4Url; webm?: WebmUrl };
 }
 
